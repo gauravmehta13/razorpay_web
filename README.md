@@ -74,22 +74,3 @@ import 'package:razorpay_web/razorpay_web.dart';
 }
 
 If payment is successful onPaymentSuccess Function will contain the payment_id from razorpay.
-
-
-
-<table>
-  <tr>
-     <td>
-       <img src = "https://user-images.githubusercontent.com/14369357/48185114-109bae00-e35a-11e8-9df8-2c8ccfcdbfc7.png" height="350">
-    </td>
-    <td>
-      <img src = "https://user-images.githubusercontent.com/14369357/48185687-d3d0b680-e35b-11e8-849b-0899364df2f2.png" height="350">
-      </td>
-    </tr>
-     <img src = "https://user-images.githubusercontent.com/14369357/48185687-d3d0b680-e35b-11e8-849b-0899364df2f2.png" height="75%">
-      </td>
-
-     <tr>
-    
-    </tr>
-  </table>
