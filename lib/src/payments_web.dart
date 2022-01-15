@@ -27,13 +27,11 @@ class RazorpayWeb extends StatelessWidget {
       html.window.onMessage.forEach((element) async {
         log('Event Received in callback: ${element.data}');
         if (element.data == 'MODAL_CLOSED') {
+          //Error
           onPaymentError('MODAL_CLOSED');
-          // Get.back();
-          // showErrorDialog(context, "Error, Please Try Again Later..!!");
         } else if (element.data.toString().contains("SUCCESS")) {
-          //  print('PAYMENT SUCCESSFULL!!!!!!!');
+          //Success
           String paymentId = element.data.toString().split('|')[1];
-          //  print('PAYMENT ID: $paymentId');
           onPaymentSuccess(paymentId);
         }
       });
