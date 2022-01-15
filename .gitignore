@@ -27,5 +27,4 @@
 .dart_tool/
 .packages
 build/
-
 example/lib/key.dart

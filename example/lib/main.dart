@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: RazorpayWeb(
-        rzpKey: rzpKey,
+        rzpKey: rzpKey, // Enter Your Razorpay Key Here
         options: RzpOptions(
           amount: 1000,
           name: "Razorpay",
