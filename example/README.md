@@ -1,16 +1,95 @@
-# example
 
-A new Flutter project.
 
-## Getting Started
+<p align="center">
+<h1>
+Flutter Razorpay Web Plugin
+</h1>
 
-This project is a starting point for a Flutter application.
+</p>
+<p align="center">
+	<i>Will be Chosen someday as a <a href="https://flutter.dev/docs/development/packages-and-plugins/favorites" rel="noopener" target="_blank">Flutter Favorite</a> by the Flutter Ecosystem Committee</i>
+</p>
+<p align="center">
+	<a href="https://pub.dev/packages/infinite_scroll_pagination" rel="noopener" target="_blank"><img src="https://img.shields.io/pub/v/infinite_scroll_pagination.svg" alt="Pub.dev Badge"></a>
+	<a href="https://github.com/EdsonBueno/infinite_scroll_pagination/actions" rel="noopener" target="_blank"><img src="https://github.com/EdsonBueno/infinite_scroll_pagination/workflows/build/badge.svg" alt="GitHub Build Badge"></a>
+	<a href="https://codecov.io/gh/EdsonBueno/infinite_scroll_pagination" rel="noopener" target="_blank"><img src="https://codecov.io/gh/EdsonBueno/infinite_scroll_pagination/branch/master/graph/badge.svg?token=B0CT995PHU" alt="Code Coverage Badge"></a>
+	<a href="https://gitter.im/infinite_scroll_pagination/community" rel="noopener" target="_blank"><img src="https://badges.gitter.im/infinite_scroll_pagination/community.svg" alt="Gitter Badge"></a>
+	<a href="https://github.com/tenhobi/effective_dart" rel="noopener" target="_blank"><img src="https://img.shields.io/badge/style-effective_dart-40c4ff.svg" alt="Effective Dart Badge"></a>
+	<a href="https://opensource.org/licenses/MIT" rel="noopener" target="_blank"><img src="https://img.shields.io/badge/license-MIT-purple.svg" alt="MIT License Badge"></a>
+	<a href="https://github.com/EdsonBueno/infinite_scroll_pagination" rel="noopener" target="_blank"><img src="https://img.shields.io/badge/platform-flutter-ff69b4.svg" alt="Flutter Platform Badge"></a>
+</p>
 
-A few resources to get you started if this is your first Flutter project:
+---
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+![image](https://user-images.githubusercontent.com/14369357/48184454-17c1bc80-e358-11e8-8821-269a30935a68.png)
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+A flutter plugin for razorpay integration for Web.
+
+#### If you use this library in your app, please let me know and I'll add it to the list.
+
+
+<p align="center">
+<img height="400" alt="demoApp" src="https://raw.githubusercontent.com/gauravmehta13/razorpay_web/master/screenshots/1.jpg">
+<img height="400" alt="demoApp" src="https://raw.githubusercontent.com/gauravmehta13/razorpay_web/master/screenshots/2.jpg">
+</p>
+<p align="center">
+<img alt="demoApp" src="https://raw.githubusercontent.com/gauravmehta13/razorpay_web/master/screenshots/3.png">
+</p>
+
+
+### Installing
+Add this in pubspec.yaml
+```
+  razorpay_web: 
+```
+### Using
+```
+import 'package:razorpay_web/razorpay_web.dart';
+```
+
+```
+  RazorpayWeb(
+        rzpKey: rzpKey, // Enter Your Razorpay Key Here
+        options: RzpOptions(
+          amount: 1000,
+          name: "Razorpay",
+          description: "Test Payment",
+          image: "https://i.imgur.com/3g7nmJC.png",
+          prefill: const PrefillData(
+            name: "Razorpay",
+            email: "rzp@gmail.com",
+            contact: "9876543210",
+          ),
+          colorhex: "#FF0000",
+        ),
+        onPaymentSuccess: (String paymentId) {
+          print("Payment Success");
+          log(paymentId);
+        },
+        onPaymentError: (String error) {
+          print("Payment Error");
+        },
+      ),
+
+}
+
+If payment is successful onPaymentSuccess Function will contain the payment_id from razorpay.
+
+
+
+<table>
+  <tr>
+     <td>
+       <img src = "https://user-images.githubusercontent.com/14369357/48185114-109bae00-e35a-11e8-9df8-2c8ccfcdbfc7.png" height="350">
+    </td>
+    <td>
+      <img src = "https://user-images.githubusercontent.com/14369357/48185687-d3d0b680-e35b-11e8-849b-0899364df2f2.png" height="350">
+      </td>
+    </tr>
+     <img src = "https://user-images.githubusercontent.com/14369357/48185687-d3d0b680-e35b-11e8-849b-0899364df2f2.png" height="75%">
+      </td>
+
+     <tr>
+    
+    </tr>
+  </table>

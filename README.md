@@ -1,39 +1,95 @@
-<!-- 
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
 
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/guides/libraries/writing-package-pages). 
 
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-library-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/developing-packages). 
--->
+<p align="center">
+<h1>
+Flutter Razorpay Web Plugin
+</h1>
 
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
+</p>
+<p align="center">
+	<i>Will be Chosen someday as a <a href="https://flutter.dev/docs/development/packages-and-plugins/favorites" rel="noopener" target="_blank">Flutter Favorite</a> by the Flutter Ecosystem Committee</i>
+</p>
+<p align="center">
+	<a href="https://pub.dev/packages/infinite_scroll_pagination" rel="noopener" target="_blank"><img src="https://img.shields.io/pub/v/infinite_scroll_pagination.svg" alt="Pub.dev Badge"></a>
+	<a href="https://github.com/EdsonBueno/infinite_scroll_pagination/actions" rel="noopener" target="_blank"><img src="https://github.com/EdsonBueno/infinite_scroll_pagination/workflows/build/badge.svg" alt="GitHub Build Badge"></a>
+	<a href="https://codecov.io/gh/EdsonBueno/infinite_scroll_pagination" rel="noopener" target="_blank"><img src="https://codecov.io/gh/EdsonBueno/infinite_scroll_pagination/branch/master/graph/badge.svg?token=B0CT995PHU" alt="Code Coverage Badge"></a>
+	<a href="https://gitter.im/infinite_scroll_pagination/community" rel="noopener" target="_blank"><img src="https://badges.gitter.im/infinite_scroll_pagination/community.svg" alt="Gitter Badge"></a>
+	<a href="https://github.com/tenhobi/effective_dart" rel="noopener" target="_blank"><img src="https://img.shields.io/badge/style-effective_dart-40c4ff.svg" alt="Effective Dart Badge"></a>
+	<a href="https://opensource.org/licenses/MIT" rel="noopener" target="_blank"><img src="https://img.shields.io/badge/license-MIT-purple.svg" alt="MIT License Badge"></a>
+	<a href="https://github.com/EdsonBueno/infinite_scroll_pagination" rel="noopener" target="_blank"><img src="https://img.shields.io/badge/platform-flutter-ff69b4.svg" alt="Flutter Platform Badge"></a>
+</p>
 
-## Features
+---
 
-TODO: List what your package can do. Maybe include images, gifs, or videos.
+![image](https://user-images.githubusercontent.com/14369357/48184454-17c1bc80-e358-11e8-8821-269a30935a68.png)
 
-## Getting started
+A flutter plugin for razorpay integration for Web.
 
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
+#### If you use this library in your app, please let me know and I'll add it to the list.
 
-## Usage
 
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder. 
+<p align="center">
+<img height="400" alt="demoApp" src="https://raw.githubusercontent.com/gauravmehta13/razorpay_web/master/screenshots/1.jpg">
+<img height="400" alt="demoApp" src="https://raw.githubusercontent.com/gauravmehta13/razorpay_web/master/screenshots/2.jpg">
+</p>
+<p align="center">
+<img alt="demoApp" src="https://raw.githubusercontent.com/gauravmehta13/razorpay_web/master/screenshots/3.png">
+</p>
 
-```dart
-const like = 'sample';
+
+### Installing
+Add this in pubspec.yaml
+```
+  razorpay_web: 
+```
+### Using
+```
+import 'package:razorpay_web/razorpay_web.dart';
 ```
 
-## Additional information
+```
+  RazorpayWeb(
+        rzpKey: rzpKey, // Enter Your Razorpay Key Here
+        options: RzpOptions(
+          amount: 1000,
+          name: "Razorpay",
+          description: "Test Payment",
+          image: "https://i.imgur.com/3g7nmJC.png",
+          prefill: const PrefillData(
+            name: "Razorpay",
+            email: "rzp@gmail.com",
+            contact: "9876543210",
+          ),
+          colorhex: "#FF0000",
+        ),
+        onPaymentSuccess: (String paymentId) {
+          print("Payment Success");
+          log(paymentId);
+        },
+        onPaymentError: (String error) {
+          print("Payment Error");
+        },
+      ),
 
-TODO: Tell users more about the package: where to find more information, how to 
-contribute to the package, how to file issues, what response they can expect 
-from the package authors, and more.
+}
+
+If payment is successful onPaymentSuccess Function will contain the payment_id from razorpay.
+
+
+
+<table>
+  <tr>
+     <td>
+       <img src = "https://user-images.githubusercontent.com/14369357/48185114-109bae00-e35a-11e8-9df8-2c8ccfcdbfc7.png" height="350">
+    </td>
+    <td>
+      <img src = "https://user-images.githubusercontent.com/14369357/48185687-d3d0b680-e35b-11e8-849b-0899364df2f2.png" height="350">
+      </td>
+    </tr>
+     <img src = "https://user-images.githubusercontent.com/14369357/48185687-d3d0b680-e35b-11e8-849b-0899364df2f2.png" height="75%">
+      </td>
+
+     <tr>
+    
+    </tr>
+  </table>
