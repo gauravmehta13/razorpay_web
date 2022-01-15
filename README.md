@@ -33,7 +33,7 @@ A flutter plugin for razorpay integration for Web.
 <img height="400" alt="demoApp" src="https://raw.githubusercontent.com/gauravmehta13/razorpay_web/master/screenshots/2.jpg">
 </p>
 <p align="center">
-<img alt="demoApp" src="https://raw.githubusercontent.com/gauravmehta13/razorpay_web/master/screenshots/3.png">
+<img alt="demoApp" src="https://raw.githubusercontent.com/gauravmehta13/razorpay_web/master/screenshots/3.PNG">
 </p>
 
 
