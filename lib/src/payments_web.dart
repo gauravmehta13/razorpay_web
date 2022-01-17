@@ -78,7 +78,7 @@ class RazorpayWeb extends StatelessWidget {
       return element;
     });
     return Scaffold(body: Builder(builder: (BuildContext context) {
-      return const HtmlElementView(viewType: 'rzp-html');
+      return HtmlElementView(viewType: 'rzp-html');
     }));
   }
 }
