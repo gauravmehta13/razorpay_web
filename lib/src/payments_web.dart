@@ -48,8 +48,7 @@ class RazorpayWeb extends StatelessWidget {
                 'order_id': '${options.orderId}',
                 'amount': '${options.amount}', 'currency': '${options.currency}',
                 'name': '${options.name}', 'description': '${options.description}',
-                'image': '${options.image}', 'prefill': {'name': '${options.prefill.name}', 'email': '${options.prefill.email}', 'contact': '${options.prefill.contact}'},
-                'theme': {'color': '${options.colorhex}'},
+                'prefill': {'name': '${options.prefill.name}', 'email': '${options.prefill.email}', 'contact': '${options.prefill.contact}'},
                 'handler': function (response){
                     window.parent.postMessage('SUCCESS|'+response.razorpay_payment_id,'*');
                 },    
