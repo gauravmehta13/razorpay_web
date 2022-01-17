@@ -11,19 +11,15 @@ class RzpOptions {
   double amount;
   String currency;
   String description;
-  String image;
   String name;
   PrefillData prefill;
-  String colorhex;
 
   RzpOptions({
     this.orderId = "",
     required this.amount,
     this.currency = "INR",
     this.description = "",
-    this.image = "",
     this.name = "",
     this.prefill = const PrefillData(),
-    this.colorhex = "",
   });
 }
