@@ -1,6 +1,6 @@
-## 1.0.3
+## 1.0.4
 
-* Updated Documentation
+* Added Platform check
 
 ## 1.0.1
 
