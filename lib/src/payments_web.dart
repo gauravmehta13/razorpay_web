@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:razorpay_web/src/ui/ui_fake.dart' if (dart.library.html) 'package:razorpay_web/src/ui/ui_real.dart'
     as ui;
@@ -78,7 +79,10 @@ class RazorpayWeb extends StatelessWidget {
       return element;
     });
     return Scaffold(body: Builder(builder: (BuildContext context) {
-      return HtmlElementView(viewType: 'rzp-html');
+      return kIsWeb
+          // ignore: prefer_const_constructors
+          ? HtmlElementView(viewType: 'rzp-html')
+          : const Center(child: Text("Not Supported on this platform"));
     }));
   }
 }
