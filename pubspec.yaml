@@ -1,6 +1,6 @@
 name: razorpay_web
 description: Razorpay Web Payment Gateway for Flutter
-version: 1.0.2
+version: 1.0.3
 homepage: "https://github.com/gauravmehta13/razorpay_web"
 
 environment:
