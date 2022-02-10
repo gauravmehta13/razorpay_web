@@ -29,9 +29,12 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: RazorpayWeb(
-        rzpKey: rzpKey, // Enter Your Razorpay Key Here
+        rzpKey: rzpId, // Enter Your Razorpay Key Here
+        rzpSecret: rzpSecret, // Enter Your Razorpay Secret Here
         options: RzpOptions(
           amount: 1000,
+          generateOrderId: true,
+          corsUrl: kCorsUrl,
           name: "Razorpay",
           description: "Test Payment",
           image: "https://i.imgur.com/3g7nmJC.png",

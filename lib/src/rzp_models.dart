@@ -8,16 +8,20 @@ class PrefillData {
 
 class RzpOptions {
   String orderId;
-  double amount;
-  String currency;
-  String description;
-  String image;
-  String name;
-  PrefillData prefill;
-  String colorhex;
+  final String? corsUrl;
+  final double amount;
+  final String currency;
+  final String description;
+  final String image;
+  final bool generateOrderId;
+  final String name;
+  final PrefillData prefill;
+  final String colorhex;
 
   RzpOptions({
     this.orderId = "",
+    this.generateOrderId = false,
+    this.corsUrl,
     required this.amount,
     this.currency = "INR",
     this.description = "",
