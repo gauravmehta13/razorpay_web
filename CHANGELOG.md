@@ -1,3 +1,8 @@
+## 1.1.0
+
+* Added Option to generate order Id
+* Updated Dependencies
+
 ## 1.0.4
 
 * Added Platform check

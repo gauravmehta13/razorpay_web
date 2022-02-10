@@ -74,3 +74,9 @@ import 'package:razorpay_web/razorpay_web.dart';
 }
 
 If payment is successful onPaymentSuccess Function will contain the payment_id from razorpay.
+```
+
+
+Get Cors Url for generating order id from Cors Anywhere
+Github:
+* https://github.com/Rob--W/cors-anywhere
