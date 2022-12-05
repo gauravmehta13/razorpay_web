@@ -1,16 +1,78 @@
+## 1.3.5
+- Bug fixes and performance improvements
+- Updated Dependencies
+## 1.3.3
+- New Example
+- Updated Dependencies
+
+
+## 1.3.2
+
+- Updated Documentation
+
+## 1.3.1
+
+- Added Web Support
+
+## 1.3.0
+
+- Standardised the events
+- Minor bug fixes
+
+## 1.2.9
+
+- Android Native Fixes and Performance Improvements.
+
+## 1.2.7
+
+- Updated package to support for NULL safety.
+
+## 1.2.6
+
+- Updated package to support for NULL safety.
+
+## 1.2.3
+
+- Updated Android API key version.
+
+## 1.2.2
+
+- Updated Podspec to use `razorpay-pod ~> 1.1.5`
+
+## 1.2.1
+
+- Android bug fixes.
+
+## 1.2.0
+
+- Android implementation fixes added.
+
+## 1.1.4
+
+- Android SDK changes updated
+
+## 1.1.3
+
+- Updated podspec for without the version so it will always point to the latest version.
+- Updated changes around Module stability related to iOS and Swift.
+
+## 1.1.2
+
+- Updated Podspec to use `razorpay-pod ~> 1.1.4`
+
+## 1.1.1
+
+- Updated podspec and build.gradle to match plugin versions
+
 ## 1.1.0
 
-* Added Option to generate order Id
-* Updated Dependencies
+- Removed alpha status
 
-## 1.0.4
+## 1.1.0-alpha
 
-* Added Platform check
+- Added `signature` and `orderId` to `PaymentSuccessResponse` for Orders API support.
+- Fixed crash due to `ActivityNotFoundException`
 
-## 1.0.1
+## 1.0.0-alpha
 
-* Updated Documentation
-
-## 0.0.1
-
-* Initial Release
+- Initial Release
