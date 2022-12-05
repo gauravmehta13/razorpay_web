@@ -14,7 +14,6 @@ dependencies:
   flutter_web_plugins:
     sdk: flutter
   eventify: ^1.0.1
-  fluttertoast: ^8.1.1
   package_info_plus: ^3.0.2
   universal_platform: ^1.0.0+1
 
