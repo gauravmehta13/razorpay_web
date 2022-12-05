@@ -1,4 +1,7 @@
 ## 1.3.5
+- Fixed iOS build issue
+- Updated Dependencies
+## 1.3.5
 - Bug fixes and performance improvements
 - Updated Dependencies
 ## 1.3.3

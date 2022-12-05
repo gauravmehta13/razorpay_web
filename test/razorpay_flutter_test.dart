@@ -52,9 +52,9 @@ void main() {
           'prefill': {'contact': '8888888888', 'email': 'test@razorpay.com'}
         };
 
-        var errorHandler = (PaymentFailureResponse response) {
+        errorHandler(PaymentFailureResponse response) {
           expect(response.code, equals(Razorpay.INVALID_OPTIONS));
-        };
+        }
 
         razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, expectAsync1(errorHandler, count: 1));
 
