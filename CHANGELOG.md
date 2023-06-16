@@ -1,3 +1,6 @@
+## 1.3.8
+- Added screenshots
+
 ## 1.3.7
 - Update package_info_plus to 4.0.0 to support 3.10.1 flutter version
 - Synced with official razorpay plugin

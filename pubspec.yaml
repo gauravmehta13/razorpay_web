@@ -1,9 +1,13 @@
 name: razorpay_web
 description: Flutter plugin for Razorpay SDK. To know more about Razorpay, visit http://razorpay.com.
-version: 1.3.7
+version: 1.3.8
 
 homepage: https://github.com/gauravmehta13/razorpay_web
 
+screenshots:
+ - description: 'Example of web payment using Razorpay.'
+   path: screenshots/1.jpg
+   
 environment:
   sdk: ">=2.12.0 <4.0.0"
   flutter: ">=2.0.0"
