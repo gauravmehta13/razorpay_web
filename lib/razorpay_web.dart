@@ -5,8 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:universal_platform/universal_platform.dart';
 
-export 'package:razorpay_web/razorpay_flutter_web.dart';
-
 /// Flutter plugin for Razorpay SDK
 class Razorpay {
   // Response codes from platform

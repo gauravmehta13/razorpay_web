@@ -42,7 +42,10 @@ class RazorpayFlutterPlugin {
   /// Registers plugin with registrar
   static void registerWith(Registrar registrar) {
     final MethodChannel methodChannel = MethodChannel(
-        'razorpay_flutter', const StandardMethodCodec(), registrar.messenger);
+        'razorpay_flutter',
+        const StandardMethodCodec(),
+        // ignore: deprecated_member_use
+        registrar.messenger);
     final RazorpayFlutterPlugin instance = RazorpayFlutterPlugin();
     methodChannel.setMethodCallHandler(instance.handleMethodCall);
   }
