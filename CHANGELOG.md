@@ -1,3 +1,5 @@
+## 1.4.2
+- Updated Description
 ## 1.4.1
 - Bug Fix for Android
 ## 1.4.0
