@@ -5,7 +5,7 @@ PODS:
     - Toast
   - package_info_plus (0.4.5):
     - Flutter
-  - razorpay-pod (1.3.0)
+  - razorpay-pod (1.3.2)
   - razorpay_web (1.1.10):
     - Flutter
     - razorpay-pod
@@ -34,9 +34,9 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
-  fluttertoast: 74526702fea2c060ea55dde75895b7e1bde1c86b
-  package_info_plus: 6c92f08e1f853dc01228d6f553146438dafcd14e
-  razorpay-pod: ebc78907f756ace307e3fa4270ff684ebb9e291b
+  fluttertoast: fafc4fa4d01a6a9e4f772ecd190ffa525e9e2d9c
+  package_info_plus: fd030dabf36271f146f1f3beacd48f564b0f17f7
+  razorpay-pod: b129f60de5f0d0952bebfb9480a10909d4fd6b6d
   razorpay_web: 4338051683c7e262b1defcf27c29d121ad7049d4
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
 
