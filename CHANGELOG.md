@@ -1,3 +1,5 @@
+## 1.4.0
+- Updated Documentation
 ## 1.3.9
 - Minor Fixes
 ## 1.3.8
