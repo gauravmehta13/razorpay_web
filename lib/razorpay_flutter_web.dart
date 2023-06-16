@@ -9,7 +9,7 @@ class RazorpayFlutterPlugin {
   // Response codes from platform
   static const _CODE_PAYMENT_SUCCESS = 0;
   static const _CODE_PAYMENT_ERROR = 1;
-  static const _CODE_PAYMENT_EXTERNAL_WALLET = 2;
+  // static const _CODE_PAYMENT_EXTERNAL_WALLET = 2;
 
   // Payment error codes
   static const NETWORK_ERROR = 0;
@@ -66,11 +66,11 @@ class RazorpayFlutterPlugin {
               completer.complete(returnMap)
             }
         };
-    var retryCount = 0;
+    // var retryCount = 0;
     var jsObjOptions = js.JsObject.jsify(options);
     if (jsObjOptions.hasProperty('retry')) {
       if (jsObjOptions['retry']['enabled'] == true) {
-        retryCount = jsObjOptions['retry']['max_count'];
+        // retryCount = jsObjOptions['retry']['max_count'];
         options['retry'] = true;
       } else {
         options['retry'] = false;
