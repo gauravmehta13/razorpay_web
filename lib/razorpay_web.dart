@@ -5,6 +5,9 @@ import 'package:flutter/services.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:universal_platform/universal_platform.dart';
 
+export 'package:razorpay_web/razorpay_flutter_web.dart';
+
+/// Flutter plugin for Razorpay SDK
 class Razorpay {
   // Response codes from platform
   static const _CODE_PAYMENT_SUCCESS = 0;
@@ -40,7 +43,10 @@ class Razorpay {
     if (!validationResult['success']) {
       _handleResult({
         'type': _CODE_PAYMENT_ERROR,
-        'data': {'code': INVALID_OPTIONS, 'message': validationResult['message']}
+        'data': {
+          'code': INVALID_OPTIONS,
+          'message': validationResult['message']
+        }
       });
       return;
     }
@@ -79,7 +85,8 @@ class Razorpay {
 
       default:
         eventName = 'error';
-        payload = PaymentFailureResponse(UNKNOWN_ERROR, 'An unknown error occurred.');
+        payload =
+            PaymentFailureResponse(UNKNOWN_ERROR, 'An unknown error occurred.');
     }
 
     _eventEmitter.emit(eventName, null, payload);
@@ -112,15 +119,24 @@ class Razorpay {
   static Map<String, dynamic> _validateOptions(Map<String, dynamic> options) {
     var key = options['key'];
     if (key == null) {
-      return {'success': false, 'message': 'Key is required. Please check if key is present in options.'};
+      return {
+        'success': false,
+        'message': 'Key is required. Please check if key is present in options.'
+      };
     }
     return {'success': true};
   }
 }
 
+/// Payment response classes
 class PaymentSuccessResponse {
+  /// Payment id
   String? paymentId;
+
+  /// Order id
   String? orderId;
+
+  /// Signature
   String? signature;
 
   PaymentSuccessResponse(this.paymentId, this.orderId, this.signature);
@@ -134,6 +150,7 @@ class PaymentSuccessResponse {
   }
 }
 
+/// Payment response classes
 class PaymentFailureResponse {
   int? code;
   String? message;

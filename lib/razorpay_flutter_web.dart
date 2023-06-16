@@ -5,21 +5,41 @@ import 'dart:js' as js;
 import 'package:flutter/services.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 
+/// Flutter plugin for Razorpay SDK
 class RazorpayFlutterPlugin {
   // Response codes from platform
+
+  /// Success response code
   static const _CODE_PAYMENT_SUCCESS = 0;
+
+  /// Error response code
   static const _CODE_PAYMENT_ERROR = 1;
   // static const _CODE_PAYMENT_EXTERNAL_WALLET = 2;
 
   // Payment error codes
+
+  /// Network error code
   static const NETWORK_ERROR = 0;
+
+  /// Invalid options error code
   static const INVALID_OPTIONS = 1;
+
+  /// Payment cancelled error code
   static const PAYMENT_CANCELLED = 2;
+
+  /// TLS error code
   static const TLS_ERROR = 3;
+
+  /// Incompatible plugin error code
   static const INCOMPATIBLE_PLUGIN = 4;
+
+  /// Unknown error code
   static const UNKNOWN_ERROR = 100;
+
+  /// Base request error code
   static const BASE_REQUEST_ERROR = 5;
 
+  /// Registers plugin with registrar
   static void registerWith(Registrar registrar) {
     final MethodChannel methodChannel = MethodChannel(
         'razorpay_flutter', const StandardMethodCodec(), registrar.messenger);
@@ -27,6 +47,7 @@ class RazorpayFlutterPlugin {
     methodChannel.setMethodCallHandler(instance.handleMethodCall);
   }
 
+  /// Handles method calls over platform channel
   Future<Map<dynamic, dynamic>> handleMethodCall(MethodCall call) async {
     switch (call.method) {
       case 'open':
@@ -39,6 +60,7 @@ class RazorpayFlutterPlugin {
     }
   }
 
+  /// Starts the payment flow
   Future<Map<dynamic, dynamic>> startPayment(
       Map<dynamic, dynamic> options) async {
     //required for sending value after the data has been populated
