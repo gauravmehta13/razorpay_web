@@ -84,7 +84,7 @@ class Razorpay {
       default:
         eventName = 'error';
         payload =
-            PaymentFailureResponse(UNKNOWN_ERROR, 'An unknown error occurred.');
+            PaymentFailureResponse(UNKNOWN_ERROR, 'An unknown error occurred.',Metadata(paymentId: "null"));
     }
 
     _eventEmitter.emit(eventName, null, payload);
