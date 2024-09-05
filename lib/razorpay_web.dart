@@ -1,5 +1,5 @@
 library razorpay_web;
-
+import 'dart:convert';
 import 'package:eventify/eventify.dart';
 import 'package:flutter/services.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -84,7 +84,7 @@ class Razorpay {
       default:
         eventName = 'error';
         payload =
-            PaymentFailureResponse(UNKNOWN_ERROR, 'An unknown error occurred.',Metadata(paymentId: "null"));
+            PaymentFailureResponse(UNKNOWN_ERROR, 'An unknown error occurred.',"{}");
     }
 
     _eventEmitter.emit(eventName, null, payload);
@@ -152,13 +152,13 @@ class PaymentSuccessResponse {
 class PaymentFailureResponse {
   int? code;
   String? message;
-  Metadata? metadata;
+  String? metadata;
   PaymentFailureResponse(this.code, this.message,this.metadata);
 
   static PaymentFailureResponse fromMap(Map<dynamic, dynamic> map) {
     var code = map["code"] as int?;
     var message = map["message"] as String?;
-      Metadata metadata =  map["metadata"] == null ? Metadata():Metadata.fromJson(map["metadata"] as Map<String, dynamic>);
+    var metadata =  (jsonEncode(map["metadata"]??{})??"") as String?;
     return PaymentFailureResponse(code, message,metadata);
   }
 }
