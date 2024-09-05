@@ -158,7 +158,7 @@ class PaymentFailureResponse {
   static PaymentFailureResponse fromMap(Map<dynamic, dynamic> map) {
     var code = map["code"] as int?;
     var message = map["message"] as String?;
-    Metadata metadata =  map["metadata"] == null ? Metadata():Metadata.fromJson(map["metadata"]);
+      Metadata metadata =  map["metadata"] == null ? Metadata():Metadata.fromJson(map["metadata"] as Map<String, dynamic>);
     return PaymentFailureResponse(code, message,metadata);
   }
 }
