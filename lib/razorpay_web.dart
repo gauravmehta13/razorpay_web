@@ -152,14 +152,31 @@ class PaymentSuccessResponse {
 class PaymentFailureResponse {
   int? code;
   String? message;
-
-  PaymentFailureResponse(this.code, this.message);
+  Metadata? metadata;
+  PaymentFailureResponse(this.code, this.message,this.metadata);
 
   static PaymentFailureResponse fromMap(Map<dynamic, dynamic> map) {
     var code = map["code"] as int?;
     var message = map["message"] as String?;
-    return PaymentFailureResponse(code, message);
+    Metadata metadata =  json["metadata"] == null ? Metadata():Metadata.fromJson(json["metadata"]);
+    return PaymentFailureResponse(code, message,metadata);
   }
+}
+
+class Metadata {
+    String paymentId;
+
+    Metadata({
+        this.paymentId,
+    });
+
+    factory Metadata.fromJson(Map<String, dynamic> json) => Metadata(
+        paymentId: json["payment_id"],
+    );
+
+    Map<String, dynamic> toJson() => {
+        "payment_id": paymentId,
+    };
 }
 
 class ExternalWalletResponse {
