@@ -1,6 +1,6 @@
-# example
+# razorpay_flutter_example
 
-A new Flutter project.
+Example project which is integrated with razorpay-flutter SDK
 
 ## Getting Started
 

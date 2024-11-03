@@ -1,91 +1,137 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:razorpay_web/razorpay_web.dart';
+import 'package:razorpay_flutter/razorpay_flutter.dart';
 
-void main() => runApp(const MyApp());
-
-class MyApp extends StatefulWidget {
-  const MyApp({Key? key}) : super(key: key);
-
-  @override
-  State<MyApp> createState() => _MyAppState();
+void main() {
+  runApp(const MyApp());
 }
 
-class _MyAppState extends State<MyApp> {
-  late Razorpay _razorpay;
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Razorpay Sample App'),
+      title: 'Razorpay Flutter Sample App',
+      theme: ThemeData(
+        colorScheme: const ColorScheme.light(
+          primary: Color(0xFF0D94FB),
+          secondary: Color(0xFF012652),
         ),
-        body: Center(
-            child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-              ElevatedButton(onPressed: openCheckout, child: const Text('Open'))
-            ])),
+        useMaterial3: true,
+      ),
+      home: const HomePage(),
+    );
+  }
+}
+
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Razorpay Flutter Sample App'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            const Text('Pay with Razorpay'),
+            ElevatedButton(
+              onPressed: () {
+                Razorpay razorpay = Razorpay();
+                var options = {
+                  'key': 'rzp_live_ILgsfZCZoFIKMb',
+                  'amount': 100,
+                  'name': 'Acme Corp.',
+                  'description': 'Fine T-Shirt',
+                  'retry': {'enabled': false, 'max_count': 1},
+                  'send_sms_hash': true,
+                  'prefill': {
+                    'contact': '8888888888',
+                    'email': 'test@razorpay.com'
+                  },
+                  'external': {
+                    'wallets': ['paytm']
+                  }
+                };
+                razorpay.on(
+                  Razorpay.EVENT_PAYMENT_ERROR,
+                  handlePaymentErrorResponse,
+                );
+                razorpay.on(
+                  Razorpay.EVENT_PAYMENT_SUCCESS,
+                  handlePaymentSuccessResponse,
+                );
+                razorpay.on(
+                  Razorpay.EVENT_EXTERNAL_WALLET,
+                  handleExternalWalletSelected,
+                );
+                razorpay.open(options);
+              },
+              child: const Text('Pay with Razorpay'),
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  @override
-  void initState() {
-    super.initState();
-    _razorpay = Razorpay();
-    _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
-    _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
-    _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
+  void handlePaymentErrorResponse(PaymentFailureResponse response) {
+    // PaymentFailureResponse contains three values:
+    // 1. Error Code
+    // 2. Error Description
+    // 3. Metadata
+    showAlertDialog(
+      context,
+      'Payment Failed',
+      'Code: ${response.code}\n'
+          'Description: ${response.message}\n'
+          'Metadata: ${response.error.toString()}',
+    );
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-    _razorpay.clear();
+  void handlePaymentSuccessResponse(PaymentSuccessResponse response) {
+    // PaymentSuccessResponse contains three values:
+    // 1. Order ID
+    // 2. Payment ID
+    // 3. Signature
+    showAlertDialog(
+      context,
+      'Payment Successful',
+      'Payment ID: ${response.paymentId}',
+    );
   }
 
-  void openCheckout() async {
-    var options = {
-      'key': 'rzp_test_1DP5mmOlF5G5ag',
-      'amount': 100,
-      'name': 'Acme Corp.',
-      'description': 'Fine T-Shirt',
-      'send_sms_hash': true,
-      'prefill': {'contact': '8888888888', 'email': 'test@razorpay.com'},
-      'external': {
-        'wallets': ['paytm']
-      }
-    };
-
-    try {
-      _razorpay.open(options);
-    } catch (e) {
-      debugPrint('Error: e');
-    }
+  void handleExternalWalletSelected(ExternalWalletResponse response) {
+    showAlertDialog(
+      context,
+      'External Wallet Selected',
+      '${response.walletName}',
+    );
   }
 
-  void _handlePaymentSuccess(PaymentSuccessResponse response) {
-    log('Success Response: $response');
-    Fluttertoast.showToast(
-        msg: "SUCCESS: ${response.paymentId!}",
-        toastLength: Toast.LENGTH_SHORT);
-  }
-
-  void _handlePaymentError(PaymentFailureResponse response) {
-    log('Error Response: $response');
-    Fluttertoast.showToast(
-        msg: "ERROR: ${response.code} - ${response.message!}",
-        toastLength: Toast.LENGTH_SHORT);
-  }
-
-  void _handleExternalWallet(ExternalWalletResponse response) {
-    log('External SDK Response: $response');
-    Fluttertoast.showToast(
-        msg: "EXTERNAL_WALLET: ${response.walletName!}",
-        toastLength: Toast.LENGTH_SHORT);
+  void showAlertDialog(BuildContext context, String title, String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title),
+          content: Text(message),
+          actions: [
+            ElevatedButton(
+              onPressed: Navigator.of(context).pop,
+              child: const Text('Continue'),
+            ),
+          ],
+        );
+      },
+    );
   }
 }

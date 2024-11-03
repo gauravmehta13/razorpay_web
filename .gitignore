@@ -8,6 +8,7 @@
 .buildlog/
 .history
 .svn/
+migrate_working_dir/
 
 # IntelliJ related
 *.iml
@@ -27,4 +28,3 @@
 .dart_tool/
 .packages
 build/
-example/lib/key.dart

@@ -1,35 +1,22 @@
-## 1.4.2
-- Updated Description
-## 1.4.1
-- Bug Fix for Android
-## 1.4.0
-- Updated Documentation
-## 1.3.9
-- Minor Fixes
-## 1.3.8
-- Added screenshots
-
-## 1.3.7
-- Update package_info_plus to 4.0.0 to support 3.10.1 flutter version
-- Synced with official razorpay plugin
-## 1.3.6
-- Fixed iOS build issue
-- Updated Dependencies
 ## 1.3.5
-- Bug fixes and performance improvements
-- Updated Dependencies
-## 1.3.3
-- New Example
-- Updated Dependencies
 
+- Update package_info_plus to 4.0.0 to support 3.10.1 flutter version
+
+## 1.3.4
+
+- Removed jcenter for android due to deprecation
+
+## 1.3.3
+
+- Detailed error object added in the error response
 
 ## 1.3.2
 
-- Updated Documentation
+- Bug fixes and performance improvements
 
 ## 1.3.1
 
-- Added Web Support
+- Intent Redirection Vulnerability fix as per updated Google Policy
 
 ## 1.3.0
 

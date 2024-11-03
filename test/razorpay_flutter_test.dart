@@ -1,7 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:razorpay_web/razorpay_web.dart';
+import 'package:razorpay_flutter/razorpay_flutter.dart';
 
 void main() {
   group("$Razorpay", () {
@@ -12,11 +11,14 @@ void main() {
     late Razorpay razorpay;
 
     setUp(() {
-      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
-          .setMockMethodCallHandler(channel, (MethodCall call) async {
-        log.add(call);
-        return {};
-      });
+      final messengerInstance = TestDefaultBinaryMessengerBinding.instance;
+      messengerInstance.defaultBinaryMessenger.setMockMethodCallHandler(
+        channel,
+        (MethodCall call) async {
+          log.add(call);
+          return {};
+        },
+      );
 
       razorpay = Razorpay();
 
@@ -25,9 +27,7 @@ void main() {
 
     group("#open", () {
       setUp(() {
-        WidgetsFlutterBinding.ensureInitialized();
-        razorpay = Razorpay();
-        // razorpay.clear();
+        razorpay.clear();
       });
 
       test('passes options correctly', () async {
@@ -57,7 +57,9 @@ void main() {
         }
 
         razorpay.on(
-            Razorpay.EVENT_PAYMENT_ERROR, expectAsync1(errorHandler, count: 1));
+          Razorpay.EVENT_PAYMENT_ERROR,
+          expectAsync1(errorHandler, count: 1),
+        );
 
         razorpay.open(options);
       });
