@@ -12,10 +12,10 @@
 @import fluttertoast;
 #endif
 
-#if __has_include(<razorpay_flutter/RazorpayFlutterPlugin.h>)
-#import <razorpay_flutter/RazorpayFlutterPlugin.h>
+#if __has_include(<razorpay_web/RazorpayFlutterPlugin.h>)
+#import <razorpay_web/RazorpayFlutterPlugin.h>
 #else
-@import razorpay_flutter;
+@import razorpay_web;
 #endif
 
 @implementation GeneratedPluginRegistrant

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:razorpay_flutter/razorpay_flutter.dart';
+import 'package:razorpay_web/razorpay_flutter.dart';
 
 void main() {
   runApp(const MyApp());
@@ -47,7 +47,7 @@ class _HomePageState extends State<HomePage> {
               onPressed: () {
                 Razorpay razorpay = Razorpay();
                 var options = {
-                  'key': 'rzp_live_ILgsfZCZoFIKMb',
+                  'key': 'rzp_test_1DP5mmOlF5G5ag',
                   'amount': 100,
                   'name': 'Acme Corp.',
                   'description': 'Fine T-Shirt',

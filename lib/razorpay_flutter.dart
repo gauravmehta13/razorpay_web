@@ -1,5 +1,5 @@
-import 'package:flutter/services.dart';
 import 'package:eventify/eventify.dart';
+import 'package:flutter/services.dart';
 
 class Razorpay {
   // Response codes from platform
@@ -20,13 +20,13 @@ class Razorpay {
   static const INCOMPATIBLE_PLUGIN = 4;
   static const UNKNOWN_ERROR = 100;
 
-  static const MethodChannel _channel = const MethodChannel('razorpay_flutter');
+  static const MethodChannel _channel = MethodChannel('razorpay_flutter');
 
   // EventEmitter instance used for communication
   late EventEmitter _eventEmitter;
 
   Razorpay() {
-    _eventEmitter = new EventEmitter();
+    _eventEmitter = EventEmitter();
   }
 
   /// Opens Razorpay checkout
@@ -82,9 +82,10 @@ class Razorpay {
 
   /// Registers event listeners for payment events
   void on(String event, Function handler) {
-    EventCallback cb = (event, cont) {
+    cb(event, cont) {
       handler(event.eventData);
-    };
+    }
+
     _eventEmitter.on(event, null, cb);
     _resync();
   }
@@ -121,14 +122,15 @@ class PaymentSuccessResponse {
   String? signature;
   Map<dynamic, dynamic>? data;
 
-  PaymentSuccessResponse(this.paymentId, this.orderId, this.signature, this.data);
+  PaymentSuccessResponse(
+      this.paymentId, this.orderId, this.signature, this.data);
 
   static PaymentSuccessResponse fromMap(Map<dynamic, dynamic> map) {
     String? paymentId = map["razorpay_payment_id"];
     String? signature = map["razorpay_signature"];
     String? orderId = map["razorpay_order_id"];
     Map<dynamic, dynamic> data = map;
-    return new PaymentSuccessResponse(paymentId, orderId, signature, data);
+    return PaymentSuccessResponse(paymentId, orderId, signature, data);
   }
 }
 
@@ -143,7 +145,7 @@ class PaymentFailureResponse {
     var code = map["code"] as int?;
     var message = map["message"] as String?;
     var responseBody = map["responseBody"] as Map<dynamic, dynamic>?;
-    return new PaymentFailureResponse(code, message, responseBody);
+    return PaymentFailureResponse(code, message, responseBody);
   }
 }
 
@@ -154,6 +156,6 @@ class ExternalWalletResponse {
 
   static ExternalWalletResponse fromMap(Map<dynamic, dynamic> map) {
     var walletName = map["external_wallet"] as String?;
-    return new ExternalWalletResponse(walletName);
+    return ExternalWalletResponse(walletName);
   }
 }

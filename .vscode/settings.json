@@ -1,3 +1,15 @@
 {
-    "dart.flutterSdkPath": "/Users/ramprasad.a/Developer/flutter"
+  
+  "dart.flutterSdkPath": ".fvm/flutter_sdk",
+  "dart.sdkPath": ".fvm/flutter_sdk",
+
+  "[dart]": {
+		"editor.formatOnSave": true,
+		"editor.formatOnType": true,
+		
+		"editor.codeActionsOnSave": {
+			"source.organizeImports": "explicit",
+			"source.fixAll": "explicit"
+		}
+	},
 }

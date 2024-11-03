@@ -6,7 +6,7 @@ import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:js/js.dart';
-import 'package:razorpay_flutter/js_razorpay.dart';
+import 'package:razorpay_web/js_razorpay.dart';
 
 class RazorpayFlutterPlugin {
   /// Success response code
