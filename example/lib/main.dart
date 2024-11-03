@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:razorpay_web/razorpay_flutter.dart';
+import 'package:razorpay_web/razorpay_web.dart';
 
 void main() {
   runApp(const MyApp());
