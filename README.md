@@ -21,6 +21,9 @@ Flutter Razorpay Plugin
 
 A flutter plugin for razorpay integration for Web , Android and iOS.
 
+## Live Demo
+Try out the live web demo at: [https://razorpayy.web.app/](https://razorpayy.web.app/)
+
 
 <p align="center">
 <img height="400" alt="demoApp" src="https://raw.githubusercontent.com/gauravmehta13/razorpay_web/master/screenshots/1.jpg">
@@ -50,7 +53,10 @@ The following documentation is only focused on the wrapper around our native And
 
 **iOS**: [https://razorpay.com/docs/ios/](https://razorpay.com/docs/ios/)
 
-**Web**: No Setup Required, The package supports web out of the box.
+**Web**: dd the following script to your `web/index.html` file in the head tag:
+```html
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+```
 
 To know more about Razorpay payment flow and steps involved, read up here: [https://razorpay.com/docs/](https://razorpay.com/docs/)
 
