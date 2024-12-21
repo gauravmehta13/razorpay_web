@@ -105,7 +105,9 @@ class _HomePageState extends State<HomePage> {
     showAlertDialog(
       context,
       'Payment Successful',
-      'Payment ID: ${response.paymentId}',
+      'Payment ID: ${response.paymentId}\n'
+          'Order ID: ${response.orderId}\n'
+          'Signature: ${response.signature}',
     );
   }
 
