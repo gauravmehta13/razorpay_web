@@ -1,5 +1,6 @@
 {
   "hosting": {
+    "site": "razorpayy",
     "public": "build/web",
     "ignore": [
       "firebase.json",
