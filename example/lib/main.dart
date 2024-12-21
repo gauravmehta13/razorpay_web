@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:razorpay_web/razorpay_web.dart';
 
@@ -47,7 +48,7 @@ class _MyAppState extends State<MyApp> {
 
   void openCheckout() async {
     var options = {
-      'key': 'rzp_test_1DP5mmOlF5G5ag',
+      'key': kDebugMode ? 'rzp_test_1DP5mmOlF5G5ag' : "rzp_live_h33xU21Pn6h51e",
       'amount': 100,
       'name': 'Acme Corp.',
       'description': 'Fine T-Shirt',
