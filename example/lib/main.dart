@@ -50,7 +50,7 @@ class _HomePageState extends State<HomePage> {
                 var options = {
                   'key': kDebugMode
                       ? 'rzp_test_1DP5mmOlF5G5ag'
-                      : "rzp_live_CayRYQfwKNf0Gh",
+                      : "rzp_live_h33xU21Pn6h51e",
                   'amount': 100,
                   'name': 'Acme Corp.',
                   'description': 'Fine T-Shirt',
