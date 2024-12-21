@@ -91,18 +91,6 @@ class RazorpayFlutterPlugin {
               completer.complete(returnMap)
             }
         };
-    // var retryCount = 0;
-    var jsObjOptions = js.JsObject.jsify(options);
-    if (jsObjOptions.hasProperty('retry')) {
-      if (jsObjOptions['retry']['enabled'] == true) {
-        // retryCount = jsObjOptions['retry']['max_count'];
-        options['retry'] = true;
-      } else {
-        options['retry'] = false;
-      }
-    } else {
-      options['retry'] = false;
-    }
 
     var rjs = html.document.getElementsByTagName('script')[0];
     var rzpjs = html.document.createElement('script');

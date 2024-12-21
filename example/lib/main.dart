@@ -1,7 +1,4 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:razorpay_web/razorpay_web.dart';
 
 void main() => runApp(const MyApp());
@@ -69,23 +66,36 @@ class _MyAppState extends State<MyApp> {
   }
 
   void _handlePaymentSuccess(PaymentSuccessResponse response) {
-    log('Success Response: $response');
-    Fluttertoast.showToast(
-        msg: "SUCCESS: ${response.paymentId!}",
-        toastLength: Toast.LENGTH_SHORT);
+    print('Payment Id: ${response.paymentId}');
+    print('Order Id: ${response.orderId}');
+    print('Signature: ${response.signature}');
+    // show success message
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('SUCCESS: Payment Id: ${response.paymentId}'),
+      ),
+    );
   }
 
   void _handlePaymentError(PaymentFailureResponse response) {
-    log('Error Response: $response');
-    Fluttertoast.showToast(
-        msg: "ERROR: ${response.code} - ${response.message!}",
-        toastLength: Toast.LENGTH_SHORT);
+    print('Code: ${response.code}');
+    print('Message: ${response.message}');
+
+    // show error message
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('ERROR: ${response.message}'),
+      ),
+    );
   }
 
   void _handleExternalWallet(ExternalWalletResponse response) {
-    log('External SDK Response: $response');
-    Fluttertoast.showToast(
-        msg: "EXTERNAL_WALLET: ${response.walletName!}",
-        toastLength: Toast.LENGTH_SHORT);
+    print('EXTERNAL_WALLET: ${response.walletName}');
+    // show external wallet name
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('EXTERNAL_WALLET: ${response.walletName}'),
+      ),
+    );
   }
 }
