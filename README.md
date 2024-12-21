@@ -52,7 +52,7 @@ The following documentation is only focused on the wrapper around our native And
 
 **iOS**: [https://razorpay.com/docs/ios/](https://razorpay.com/docs/ios/)
 
-**Web**: dd the following script to your `web/index.html` file in the head tag:
+**Web**: Add the following script to your `web/index.html` file in the head tag:
 ```html
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 ```
