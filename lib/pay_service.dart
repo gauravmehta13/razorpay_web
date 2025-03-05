@@ -30,9 +30,14 @@ class PayService {
       return completer.future;
     }
 
+    ///The dart function which will be called when payment is successful
     void handlerFn(jsinterop.JSObject jsResponse) {
       debugPrint('handlerFn called');
+
+      ///Retriving Dart object from JS object
       Object? responseDartObject = jsResponse.dartify();
+
+      ///If not null then parse it back as dart map
       if (responseDartObject != null) {
         Map response = Map.from(responseDartObject as LinkedHashMap);
         returnMap['type'] = ResponseCodes.CODE_PAYMENT_SUCCESS;
@@ -46,6 +51,7 @@ class PayService {
       }
     }
 
+    ///The dart function which will be called when dialogue is closed by clicking close button
     void dismissFn() {
       debugPrint('dismissFn called');
       if (!completer.isCompleted) {
@@ -57,7 +63,7 @@ class PayService {
       }
     }
 
-    // Handle payment failure
+    /// Dart function to handle payment failure
     void onFailedFn(jsinterop.JSObject jsResponse) {
       debugPrint('onFailedFn called');
       Object? dartObject = jsResponse.dartify();
