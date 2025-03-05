@@ -1,13 +1,17 @@
-import 'dart:async';
+// ignore_for_file: file_names
+
+import 'dart:async' show Completer, Future;
 import 'dart:collection';
+import 'dart:developer';
 // import 'dart:js' as js;
 import 'dart:js_interop' as jsinterop;
 import 'dart:js_interop_unsafe' as jsinterop_unsafe;
 
-import 'package:flutter/foundation.dart';
 import 'package:web/web.dart' as web;
 
-class PayFn {
+///A service class which only manages the payment process for better code readability
+class PayService {
+  ///Error codes
   static const _CODE_PAYMENT_SUCCESS = 0;
   static const _CODE_PAYMENT_ERROR = 1;
   static const PAYMENT_CANCELLED = 2;
@@ -16,18 +20,19 @@ class PayFn {
   /// Starts the payment flow
   Future<Map<dynamic, dynamic>> startPayment(Map<dynamic, dynamic> options) async {
     // Completer to return future response
-    var completer = Completer<Map<dynamic, dynamic>>();
+    Completer<Map<dynamic, dynamic>> completer = Completer<Map<dynamic, dynamic>>();
 
     /// Main return object
-    var returnMap = <dynamic, dynamic>{};
+    Map<dynamic, dynamic> returnMap = <dynamic, dynamic>{};
 
     /// Data object
-    var dataMap = <dynamic, dynamic>{};
+    Map<dynamic, dynamic> dataMap = <dynamic, dynamic>{};
 
-    // Ensure Razorpay SDK is loaded before proceeding
-    // bool isRazorpayLoaded = js.context.hasProperty('Razorpay');
-    // bool isRazorpayLoadedMethod1 = web.window.hasProperty('Razorpay'.toJS).toDart;
+    ///Ensure Razorpay SDK is loaded before proceeding
     bool isRazorpayLoaded = web.window.has('Razorpay');
+
+    /// Optionally we can use this double conversion method also:
+    /// bool isRazorpayLoaded = web.window.hasProperty('Razorpay'.toJS).toDart;
 
     if (isRazorpayLoaded == false) {
       completer.completeError("Razorpay SDK not loaded");
@@ -35,8 +40,8 @@ class PayFn {
     }
 
     void handlerFn(jsinterop.JSObject jsResponse) {
+      log('handlerFn called');
       Object? responseDartObject = jsResponse.dartify();
-      debugPrint('response type: ${responseDartObject.runtimeType}');
       if (responseDartObject != null) {
         Map response = Map.from(responseDartObject as LinkedHashMap);
         returnMap['type'] = _CODE_PAYMENT_SUCCESS;
@@ -46,12 +51,12 @@ class PayFn {
         returnMap['data'] = dataMap;
         completer.complete(returnMap);
       } else {
-        debugPrint('response is not Map');
+        log('response is not Map');
       }
     }
 
     void dismissFn() {
-      debugPrint('dismissed');
+      log('dismissFn called');
       if (!completer.isCompleted) {
         returnMap['type'] = _CODE_PAYMENT_ERROR;
         dataMap['code'] = PAYMENT_CANCELLED;
@@ -63,7 +68,7 @@ class PayFn {
 
     // Handle payment failure
     void onFailedFn(jsinterop.JSObject jsResponse) {
-      debugPrint('error onFailedFn');
+      log('onFailedFn called');
       Object? dartObject = jsResponse.dartify();
       if (dartObject != null) {
         Map response = Map.from(dartObject as LinkedHashMap);
@@ -78,27 +83,33 @@ class PayFn {
         returnMap['data'] = dataMap;
         completer.complete(returnMap);
       } else {
-        debugPrint('onFailedFn response is not Map');
+        log('onFailedFn response is not Map');
       }
     }
 
-    options['handler'] = handlerFn;
-    options['modal.ondismiss'] = dismissFn;
-
-    // Initialize Razorpay instance
     /// Converting dart map to js object
-    // js.JsObject jsmapFromDart = js.JsObject.jsify(options);
+    /// [NOTE] handler functions should not be added before jsify,
+    /// if we pass them like options['handler'] = handlerFn, then it will be
+    /// a dart function and not a js function so in release mode the success, or failiure, or dismiss
+    /// handlers will not be executed.
+    /// Also if we call .toJS before jsify(), it's not running so we have to
+    /// put all the handlers to the newly created [jsmapFromDart]
     jsinterop.JSAny? jsmapFromDart = options.jsify();
 
-    /// Retrieving Browser Object named Razorpay from the .js file we received from checkout API
-    jsinterop.JSAny? razorpay = web.window.callMethod('Razorpay'.toJS, jsmapFromDart);
+    /// Now manually insert the function handlers as JS object
+    if (jsmapFromDart != null) {
+      // Now manually insert the function handlers into the JS object
+      (jsmapFromDart as jsinterop.JSObject).setProperty('handler'.toJS, handlerFn.toJS);
+      (jsmapFromDart).setProperty('modal.ondismiss'.toJS, dismissFn.toJS);
+      (jsmapFromDart).setProperty('payment.failed'.toJS, onFailedFn.toJS);
+    }
 
-    /// Converting Browser Object to JS Object
-    // js.JsObject razorpay = js.JsObject.fromBrowserObject(browserObject);
+    /// Retrieving the Object named [Razorpay] from the .js file we received from checkout API
+    jsinterop.JSAny? razorpay = web.window.callMethod('Razorpay'.toJS, jsmapFromDart);
 
     if (razorpay is jsinterop.JSObject) {
       ///Assigning the onFailedFn to the payment.failed event
-      razorpay.callMethod('on'.toJS, onFailedFn.toJS);
+      razorpay.callMethod('on'.toJS, 'payment.failed'.toJS, onFailedFn.toJS);
 
       ///If no errors captured, then execute the ['open'] method
       razorpay.callMethod('open'.toJS);
