@@ -6,7 +6,13 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:universal_platform/universal_platform.dart';
 
 import 'Constants/Constants.dart';
+import 'Models/ExternalWalletResponse.dart';
+import 'Models/PaymentFailureResponse.dart';
+import 'Models/PaymentSuccessResponse.dart';
 
+export './Models/ExternalWalletResponse.dart';
+export './Models/PaymentFailureResponse.dart';
+export './Models/PaymentSuccessResponse.dart';
 export 'Constants/Constants.dart';
 
 /// Flutter plugin for Razorpay SDK
@@ -105,52 +111,5 @@ class Razorpay {
       return {'success': false, 'message': 'Key is required. Please check if key is present in options.'};
     }
     return {'success': true};
-  }
-}
-
-/// Payment response classes
-class PaymentSuccessResponse {
-  /// Payment id
-  String? paymentId;
-
-  /// Order id
-  String? orderId;
-
-  /// Signature
-  String? signature;
-
-  PaymentSuccessResponse(this.paymentId, this.orderId, this.signature);
-
-  static PaymentSuccessResponse fromMap(Map<dynamic, dynamic> map) {
-    String? paymentId = map["razorpay_payment_id"];
-    String? signature = map["razorpay_signature"];
-    String? orderId = map["razorpay_order_id"];
-
-    return PaymentSuccessResponse(paymentId, orderId, signature);
-  }
-}
-
-/// Payment response classes
-class PaymentFailureResponse {
-  int? code;
-  String? message;
-
-  PaymentFailureResponse(this.code, this.message);
-
-  static PaymentFailureResponse fromMap(Map<dynamic, dynamic> map) {
-    var code = map["code"] as int?;
-    var message = map["message"] as String?;
-    return PaymentFailureResponse(code, message);
-  }
-}
-
-class ExternalWalletResponse {
-  String? walletName;
-
-  ExternalWalletResponse(this.walletName);
-
-  static ExternalWalletResponse fromMap(Map<dynamic, dynamic> map) {
-    var walletName = map["external_wallet"] as String?;
-    return ExternalWalletResponse(walletName);
   }
 }
