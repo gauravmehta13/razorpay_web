@@ -40,10 +40,7 @@ class _MyAppState extends State<MyApp> {
           children: <Widget>[
             listtile(true),
             listtile(false),
-            ElevatedButton(
-              onPressed: openCheckout,
-              child: const Text('Pay'),
-            ),
+            payButton(),
           ],
         ));
   }
@@ -74,6 +71,13 @@ class _MyAppState extends State<MyApp> {
           icon: const Icon(Icons.copy),
         ),
       ),
+    );
+  }
+
+  Widget payButton() {
+    return ElevatedButton(
+      onPressed: openCheckout,
+      child: const Text('Pay'),
     );
   }
 
