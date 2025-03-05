@@ -1,5 +1,10 @@
 import 'dart:async';
 import 'dart:js' as js;
+import 'dart:js_interop';
+import 'dart:js_interop_unsafe';
+
+// import 'dart:js_interop' as js;
+import 'package:web/web.dart' as web;
 
 class PayFn {
   static const _CODE_PAYMENT_SUCCESS = 0;
@@ -19,7 +24,8 @@ class PayFn {
     var dataMap = <dynamic, dynamic>{};
 
     // Ensure Razorpay SDK is loaded before proceeding
-    bool isRazorpayLoaded = js.context.hasProperty('Razorpay');
+    // bool isRazorpayLoaded = js.context.hasProperty('Razorpay');
+    bool isRazorpayLoaded = web.window.hasProperty('Razorpay'.toJS).toDart;
     if (isRazorpayLoaded == false) {
       completer.completeError("Razorpay SDK not loaded");
       return completer.future;
