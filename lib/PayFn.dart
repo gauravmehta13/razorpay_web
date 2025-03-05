@@ -12,11 +12,15 @@ class PayFn {
     // Completer to return future response
     var completer = Completer<Map<dynamic, dynamic>>();
 
-    var returnMap = <dynamic, dynamic>{}; // Main return object
-    var dataMap = <dynamic, dynamic>{}; // Data object
+    /// Main return object
+    var returnMap = <dynamic, dynamic>{};
+
+    /// Data object
+    var dataMap = <dynamic, dynamic>{};
 
     // Ensure Razorpay SDK is loaded before proceeding
-    if (!js.context.hasProperty('Razorpay')) {
+    bool isRazorpayLoaded = js.context.hasProperty('Razorpay');
+    if (isRazorpayLoaded == false) {
       completer.completeError("Razorpay SDK not loaded");
       return completer.future;
     }
@@ -58,11 +62,19 @@ class PayFn {
     options['modal.ondismiss'] = dismissFn;
 
     // Initialize Razorpay instance
+    /// Converting dart map to js object
     js.JsObject jsmapFromDart = js.JsObject.jsify(options);
+
+    /// Retrieving Browser Object named Razorpay from the .js file we received from checkout API
     Object browserObject = js.context.callMethod('Razorpay', [jsmapFromDart]);
+
+    /// Converting Browser Object to JS Object
     js.JsObject razorpay = js.JsObject.fromBrowserObject(browserObject);
 
+    ///Assigning the onFailedFn to the payment.failed event
     razorpay.callMethod('on', ['payment.failed', onFailedFn]);
+
+    ///If no errors captured, then execute the ['open'] method
     razorpay.callMethod('open');
     return completer.future;
   }
