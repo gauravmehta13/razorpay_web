@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:html' as html;
 import 'dart:js' as js;
 
 import 'package:flutter/services.dart';
@@ -64,38 +63,42 @@ class RazorpayFlutterPlugin {
   }
 
   /// Starts the payment flow
-  Future<Map<dynamic, dynamic>> startPayment(
-      Map<dynamic, dynamic> options) async {
-    //required for sending value after the data has been populated
+  Future<Map<dynamic, dynamic>> startPayment(Map<dynamic, dynamic> options) async {
+    // Completer to return future response
     var completer = Completer<Map<dynamic, dynamic>>();
 
-    var returnMap = <dynamic, dynamic>{}; // main map object
-    var dataMap = <dynamic, dynamic>{}; // return map object
+    var returnMap = <dynamic, dynamic>{}; // Main return object
+    var dataMap = <dynamic, dynamic>{}; // Data object
 
-    js.JsObject razorpay;
-    options['handler'] = (response) => {
-          returnMap['type'] = _CODE_PAYMENT_SUCCESS,
-          dataMap['razorpay_payment_id'] = response['razorpay_payment_id'],
-          dataMap['razorpay_order_id'] = response['razorpay_order_id'],
-          dataMap['razorpay_signature'] = response['razorpay_signature'],
-          returnMap['data'] = dataMap,
-          completer.complete(returnMap)
-        };
-    options['modal.ondismiss'] = () => {
-          if (!completer.isCompleted)
-            {
-              returnMap['type'] = _CODE_PAYMENT_ERROR,
-              dataMap['code'] = PAYMENT_CANCELLED,
-              dataMap['message'] = 'Payment processing cancelled by user',
-              returnMap['data'] = dataMap,
-              completer.complete(returnMap)
-            }
-        };
-    // var retryCount = 0;
+    // Ensure Razorpay SDK is loaded before proceeding
+    if (!js.context.hasProperty('Razorpay')) {
+      completer.completeError("Razorpay SDK not loaded");
+      return completer.future;
+    }
+
+    options['handler'] = (response) {
+      returnMap['type'] = _CODE_PAYMENT_SUCCESS;
+      dataMap['razorpay_payment_id'] = response['razorpay_payment_id'];
+      dataMap['razorpay_order_id'] = response['razorpay_order_id'];
+      dataMap['razorpay_signature'] = response['razorpay_signature'];
+      returnMap['data'] = dataMap;
+      completer.complete(returnMap);
+    };
+
+    options['modal.ondismiss'] = () {
+      if (!completer.isCompleted) {
+        returnMap['type'] = _CODE_PAYMENT_ERROR;
+        dataMap['code'] = PAYMENT_CANCELLED;
+        dataMap['message'] = 'Payment processing cancelled by user';
+        returnMap['data'] = dataMap;
+        completer.complete(returnMap);
+      }
+    };
+
+    // Handle retry logic
     var jsObjOptions = js.JsObject.jsify(options);
     if (jsObjOptions.hasProperty('retry')) {
       if (jsObjOptions['retry']['enabled'] == true) {
-        // retryCount = jsObjOptions['retry']['max_count'];
         options['retry'] = true;
       } else {
         options['retry'] = false;
@@ -104,34 +107,29 @@ class RazorpayFlutterPlugin {
       options['retry'] = false;
     }
 
-    var rjs = html.document.getElementsByTagName('script')[0];
-    var rzpjs = html.document.createElement('script');
-    rzpjs.id = 'rzp-jssdk';
-    rzpjs.setAttribute('src', 'https://checkout.razorpay.com/v1/checkout.js');
-    rjs.parentNode?.insertBefore(rzpjs, rjs);
-    rzpjs.addEventListener(
-        'load',
-        (event) => {
-              razorpay = js.JsObject.fromBrowserObject(js.context
-                  .callMethod('Razorpay', [js.JsObject.jsify(options)])),
-              razorpay.callMethod('on', [
-                'payment.failed',
-                (response) {
-                  returnMap['type'] = _CODE_PAYMENT_ERROR;
-                  dataMap['code'] = BASE_REQUEST_ERROR;
-                  dataMap['message'] = response['error']['description'];
-                  var metadataMap = <dynamic, dynamic>{};
-                  metadataMap['payment_id'] =
-                      response['error']['metadata']['payment_id'];
-                  dataMap['metadata'] = metadataMap;
-                  dataMap['source'] = response['error']['source'];
-                  dataMap['step'] = response['error']['step'];
-                  returnMap['data'] = dataMap;
-                  completer.complete(returnMap);
-                }
-              ]),
-              razorpay.callMethod('open')
-            });
+    // Initialize Razorpay instance
+    var razorpay = js.JsObject.fromBrowserObject(js.context.callMethod('Razorpay', [js.JsObject.jsify(options)]));
+
+    // Handle payment failure
+    razorpay.callMethod('on', [
+      'payment.failed',
+      (response) {
+        returnMap['type'] = _CODE_PAYMENT_ERROR;
+        dataMap['code'] = BASE_REQUEST_ERROR;
+        dataMap['message'] = response['error']['description'];
+        var metadataMap = <dynamic, dynamic>{};
+        metadataMap['payment_id'] = response['error']['metadata']['payment_id'];
+        dataMap['metadata'] = metadataMap;
+        dataMap['source'] = response['error']['source'];
+        dataMap['step'] = response['error']['step'];
+        returnMap['data'] = dataMap;
+        completer.complete(returnMap);
+      }
+    ]);
+
+    // Open Razorpay checkout
+    razorpay.callMethod('open');
+
     return completer.future;
   }
 }
