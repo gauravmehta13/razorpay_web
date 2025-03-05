@@ -1,9 +1,10 @@
 import 'dart:collection';
-import 'dart:developer';
 import 'dart:js_interop' as jsinterop;
 import 'dart:js_interop_unsafe' as jsinterop_unsafe;
+
+import 'package:flutter/foundation.dart';
+import 'package:razorpay_web/razorpay_web.dart';
 import 'package:web/web.dart' as web;
-import 'Constants/Constants.dart';
 
 ///A service class which only manages the payment process for better code readability
 class PayService {
@@ -30,7 +31,7 @@ class PayService {
     }
 
     void handlerFn(jsinterop.JSObject jsResponse) {
-      log('handlerFn called');
+      debugPrint('handlerFn called');
       Object? responseDartObject = jsResponse.dartify();
       if (responseDartObject != null) {
         Map response = Map.from(responseDartObject as LinkedHashMap);
@@ -41,12 +42,12 @@ class PayService {
         returnMap['data'] = dataMap;
         completer.complete(returnMap);
       } else {
-        log('response is not Map');
+        debugPrint('response is not Map');
       }
     }
 
     void dismissFn() {
-      log('dismissFn called');
+      debugPrint('dismissFn called');
       if (!completer.isCompleted) {
         returnMap['type'] = ResponseCodes.CODE_PAYMENT_ERROR;
         dataMap['code'] = ResponseCodes.PAYMENT_CANCELLED;
@@ -58,7 +59,7 @@ class PayService {
 
     // Handle payment failure
     void onFailedFn(jsinterop.JSObject jsResponse) {
-      log('onFailedFn called');
+      debugPrint('onFailedFn called');
       Object? dartObject = jsResponse.dartify();
       if (dartObject != null) {
         Map response = Map.from(dartObject as LinkedHashMap);
@@ -73,7 +74,7 @@ class PayService {
         returnMap['data'] = dataMap;
         completer.complete(returnMap);
       } else {
-        log('onFailedFn response is not Map');
+        debugPrint('onFailedFn response is not Map');
       }
     }
 
