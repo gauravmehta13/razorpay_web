@@ -40,10 +40,7 @@ class _MyAppState extends State<MyApp> {
           children: <Widget>[
             listtile(true),
             listtile(false),
-            ElevatedButton(
-              onPressed: openCheckout,
-              child: const Text('Pay'),
-            ),
+            payButton(),
           ],
         ));
   }
@@ -77,13 +74,20 @@ class _MyAppState extends State<MyApp> {
     );
   }
 
+  Widget payButton() {
+    return ElevatedButton(
+      onPressed: openCheckout,
+      child: const Text('Pay'),
+    );
+  }
+
   @override
   void initState() {
     super.initState();
     _razorpay = Razorpay();
-    _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
-    _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
-    _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
+    _razorpay.on(RazorpayEvents.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
+    _razorpay.on(RazorpayEvents.EVENT_PAYMENT_ERROR, _handlePaymentError);
+    _razorpay.on(RazorpayEvents.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
   }
 
   @override

@@ -1,32 +1,23 @@
-// ignore_for_file: file_names
-
-import 'dart:async' show Completer, Future;
 import 'dart:collection';
-import 'dart:developer';
-// import 'dart:js' as js;
 import 'dart:js_interop' as jsinterop;
 import 'dart:js_interop_unsafe' as jsinterop_unsafe;
 
+import 'package:flutter/foundation.dart';
+import 'package:razorpay_web/razorpay_web.dart';
 import 'package:web/web.dart' as web;
 
 ///A service class which only manages the payment process for better code readability
 class PayService {
-  ///Error codes
-  static const _CODE_PAYMENT_SUCCESS = 0;
-  static const _CODE_PAYMENT_ERROR = 1;
-  static const PAYMENT_CANCELLED = 2;
-  static const BASE_REQUEST_ERROR = 5;
-
   /// Starts the payment flow
-  Future<Map<dynamic, dynamic>> startPayment(Map<dynamic, dynamic> options) async {
+  Future<RpayMap> startPayment(RpayMap options) async {
     // Completer to return future response
-    Completer<Map<dynamic, dynamic>> completer = Completer<Map<dynamic, dynamic>>();
+    RpayCompleter completer = RpayCompleter();
 
     /// Main return object
-    Map<dynamic, dynamic> returnMap = <dynamic, dynamic>{};
+    RpayMap returnMap = <dynamic, dynamic>{};
 
     /// Data object
-    Map<dynamic, dynamic> dataMap = <dynamic, dynamic>{};
+    RpayMap dataMap = <dynamic, dynamic>{};
 
     ///Ensure Razorpay SDK is loaded before proceeding
     bool isRazorpayLoaded = web.window.has('Razorpay');
@@ -39,41 +30,47 @@ class PayService {
       return completer.future;
     }
 
+    ///The dart function which will be called when payment is successful
     void handlerFn(jsinterop.JSObject jsResponse) {
-      log('handlerFn called');
+      debugPrint('handlerFn called');
+
+      ///Retriving Dart object from JS object
       Object? responseDartObject = jsResponse.dartify();
+
+      ///If not null then parse it back as dart map
       if (responseDartObject != null) {
         Map response = Map.from(responseDartObject as LinkedHashMap);
-        returnMap['type'] = _CODE_PAYMENT_SUCCESS;
+        returnMap['type'] = ResponseCodes.CODE_PAYMENT_SUCCESS;
         dataMap['razorpay_payment_id'] = response['razorpay_payment_id'];
         dataMap['razorpay_order_id'] = response['razorpay_order_id'];
         dataMap['razorpay_signature'] = response['razorpay_signature'];
         returnMap['data'] = dataMap;
         completer.complete(returnMap);
       } else {
-        log('response is not Map');
+        debugPrint('response is not Map');
       }
     }
 
+    ///The dart function which will be called when dialogue is closed by clicking close button
     void dismissFn() {
-      log('dismissFn called');
+      debugPrint('dismissFn called');
       if (!completer.isCompleted) {
-        returnMap['type'] = _CODE_PAYMENT_ERROR;
-        dataMap['code'] = PAYMENT_CANCELLED;
+        returnMap['type'] = ResponseCodes.CODE_PAYMENT_ERROR;
+        dataMap['code'] = ResponseCodes.PAYMENT_CANCELLED;
         dataMap['message'] = 'Payment processing cancelled by user';
         returnMap['data'] = dataMap;
         completer.complete(returnMap);
       }
     }
 
-    // Handle payment failure
+    /// Dart function to handle payment failure
     void onFailedFn(jsinterop.JSObject jsResponse) {
-      log('onFailedFn called');
+      debugPrint('onFailedFn called');
       Object? dartObject = jsResponse.dartify();
       if (dartObject != null) {
         Map response = Map.from(dartObject as LinkedHashMap);
-        returnMap['type'] = _CODE_PAYMENT_ERROR;
-        dataMap['code'] = BASE_REQUEST_ERROR;
+        returnMap['type'] = ResponseCodes.CODE_PAYMENT_ERROR;
+        dataMap['code'] = ResponseCodes.BASE_REQUEST_ERROR;
         dataMap['message'] = response['error']['description'];
         var metadataMap = <dynamic, dynamic>{};
         metadataMap['payment_id'] = response['error']['metadata']['payment_id'];
@@ -83,7 +80,7 @@ class PayService {
         returnMap['data'] = dataMap;
         completer.complete(returnMap);
       } else {
-        log('onFailedFn response is not Map');
+        debugPrint('onFailedFn response is not Map');
       }
     }
 
