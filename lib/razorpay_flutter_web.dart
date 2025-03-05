@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/services.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
-import 'package:razorpay_web/PayFn.dart';
+import 'package:razorpay_web/PayService.dart';
 
 /// Flutter plugin for Razorpay SDK
 class RazorpayFlutterPlugin {
@@ -40,7 +40,7 @@ class RazorpayFlutterPlugin {
   Future<Map<dynamic, dynamic>> handleMethodCall(MethodCall call) async {
     switch (call.method) {
       case 'open':
-        return await PayFn().startPayment(call.arguments);
+        return await PayService().startPayment(call.arguments);
       case 'resync':
       default:
         var defaultMap = {'status': 'Not implemented on web'};
