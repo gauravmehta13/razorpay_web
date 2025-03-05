@@ -10,7 +10,7 @@ class ExternalWalletResponse {
     return ExternalWalletResponse(walletName);
   }
 
-  Json get toJson => {
+  Jsonn get toJson => {
         'external_wallet': walletName,
       };
 }

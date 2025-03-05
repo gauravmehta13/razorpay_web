@@ -13,7 +13,7 @@ class PaymentFailureResponse {
     return PaymentFailureResponse(code, message);
   }
 
-  Json get toJson => {
+  Jsonn get toJson => {
         'code': code,
         'message': message,
       };

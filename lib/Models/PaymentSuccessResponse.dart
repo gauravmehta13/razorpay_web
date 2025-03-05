@@ -21,7 +21,7 @@ class PaymentSuccessResponse {
     return PaymentSuccessResponse(paymentId, orderId, signature);
   }
 
-  Json get toJson => {
+  Jsonn get toJson => {
         'razorpay_payment_id': paymentId,
         'razorpay_order_id': orderId,
         'razorpay_signature': signature,
