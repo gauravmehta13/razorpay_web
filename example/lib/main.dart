@@ -81,9 +81,9 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     _razorpay = Razorpay();
-    _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
-    _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
-    _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
+    _razorpay.on(RazorpayEvents.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
+    _razorpay.on(RazorpayEvents.EVENT_PAYMENT_ERROR, _handlePaymentError);
+    _razorpay.on(RazorpayEvents.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
   }
 
   @override

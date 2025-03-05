@@ -9,14 +9,10 @@ import 'dart:js_interop_unsafe' as jsinterop_unsafe;
 
 import 'package:web/web.dart' as web;
 
+import 'Constants/Constants.dart';
+
 ///A service class which only manages the payment process for better code readability
 class PayService {
-  ///Error codes
-  static const _CODE_PAYMENT_SUCCESS = 0;
-  static const _CODE_PAYMENT_ERROR = 1;
-  static const PAYMENT_CANCELLED = 2;
-  static const BASE_REQUEST_ERROR = 5;
-
   /// Starts the payment flow
   Future<Map<dynamic, dynamic>> startPayment(Map<dynamic, dynamic> options) async {
     // Completer to return future response
@@ -44,7 +40,7 @@ class PayService {
       Object? responseDartObject = jsResponse.dartify();
       if (responseDartObject != null) {
         Map response = Map.from(responseDartObject as LinkedHashMap);
-        returnMap['type'] = _CODE_PAYMENT_SUCCESS;
+        returnMap['type'] = ResponseCodes.CODE_PAYMENT_SUCCESS;
         dataMap['razorpay_payment_id'] = response['razorpay_payment_id'];
         dataMap['razorpay_order_id'] = response['razorpay_order_id'];
         dataMap['razorpay_signature'] = response['razorpay_signature'];
@@ -58,8 +54,8 @@ class PayService {
     void dismissFn() {
       log('dismissFn called');
       if (!completer.isCompleted) {
-        returnMap['type'] = _CODE_PAYMENT_ERROR;
-        dataMap['code'] = PAYMENT_CANCELLED;
+        returnMap['type'] = ResponseCodes.CODE_PAYMENT_ERROR;
+        dataMap['code'] = ResponseCodes.PAYMENT_CANCELLED;
         dataMap['message'] = 'Payment processing cancelled by user';
         returnMap['data'] = dataMap;
         completer.complete(returnMap);
@@ -72,8 +68,8 @@ class PayService {
       Object? dartObject = jsResponse.dartify();
       if (dartObject != null) {
         Map response = Map.from(dartObject as LinkedHashMap);
-        returnMap['type'] = _CODE_PAYMENT_ERROR;
-        dataMap['code'] = BASE_REQUEST_ERROR;
+        returnMap['type'] = ResponseCodes.CODE_PAYMENT_ERROR;
+        dataMap['code'] = ResponseCodes.BASE_REQUEST_ERROR;
         dataMap['message'] = response['error']['description'];
         var metadataMap = <dynamic, dynamic>{};
         metadataMap['payment_id'] = response['error']['metadata']['payment_id'];

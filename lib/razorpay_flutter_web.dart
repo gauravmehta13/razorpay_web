@@ -10,21 +10,6 @@ class RazorpayFlutterPlugin {
 
   // Payment error codes
 
-  /// Network error code
-  static const NETWORK_ERROR = 0;
-
-  /// Invalid options error code
-  static const INVALID_OPTIONS = 1;
-
-  /// TLS error code
-  static const TLS_ERROR = 3;
-
-  /// Incompatible plugin error code
-  static const INCOMPATIBLE_PLUGIN = 4;
-
-  /// Unknown error code
-  static const UNKNOWN_ERROR = 100;
-
   /// Registers plugin with registrar
   static void registerWith(Registrar registrar) {
     final MethodChannel methodChannel = MethodChannel(
