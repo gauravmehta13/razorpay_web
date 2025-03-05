@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/services.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
-import 'package:razorpay_web/PayService.dart';
+import 'package:razorpay_web/pay_service.dart';
 
 /// Flutter plugin for Razorpay SDK
 class RazorpayFlutterPlugin {
