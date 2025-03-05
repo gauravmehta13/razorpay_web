@@ -1,28 +1,22 @@
-// ignore_for_file: file_names
-
-import 'dart:async' show Completer, Future;
 import 'dart:collection';
 import 'dart:developer';
-// import 'dart:js' as js;
 import 'dart:js_interop' as jsinterop;
 import 'dart:js_interop_unsafe' as jsinterop_unsafe;
-
 import 'package:web/web.dart' as web;
-
 import 'Constants/Constants.dart';
 
 ///A service class which only manages the payment process for better code readability
 class PayService {
   /// Starts the payment flow
-  Future<Map<dynamic, dynamic>> startPayment(Map<dynamic, dynamic> options) async {
+  Future<RpayMap> startPayment(RpayMap options) async {
     // Completer to return future response
-    Completer<Map<dynamic, dynamic>> completer = Completer<Map<dynamic, dynamic>>();
+    RpayCompleter completer = RpayCompleter();
 
     /// Main return object
-    Map<dynamic, dynamic> returnMap = <dynamic, dynamic>{};
+    RpayMap returnMap = <dynamic, dynamic>{};
 
     /// Data object
-    Map<dynamic, dynamic> dataMap = <dynamic, dynamic>{};
+    RpayMap dataMap = <dynamic, dynamic>{};
 
     ///Ensure Razorpay SDK is loaded before proceeding
     bool isRazorpayLoaded = web.window.has('Razorpay');
