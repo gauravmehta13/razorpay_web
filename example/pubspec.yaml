@@ -9,6 +9,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  fluttertoast: any
   razorpay_web:
     path: ../
 
