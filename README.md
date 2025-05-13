@@ -50,7 +50,8 @@ The following documentation is only focused on the wrapper around our native And
 
 **iOS**: [https://razorpay.com/docs/ios/](https://razorpay.com/docs/ios/)
 
-**Web**: No Setup Required, The package supports web out of the box.
+**Web**: In your index.html file, add the script in body tag. (See example project>web>index.html)
+<script id="rzp-jssdk" src="https://checkout.razorpay.com/v1/checkout.js" defer></script>
 
 To know more about Razorpay payment flow and steps involved, read up here: [https://razorpay.com/docs/](https://razorpay.com/docs/)
 
