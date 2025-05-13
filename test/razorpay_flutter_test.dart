@@ -12,8 +12,7 @@ void main() {
     late Razorpay razorpay;
 
     setUp(() {
-      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
-          .setMockMethodCallHandler(channel, (MethodCall call) async {
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(channel, (MethodCall call) async {
         log.add(call);
         return {};
       });
@@ -53,11 +52,10 @@ void main() {
         };
 
         errorHandler(PaymentFailureResponse response) {
-          expect(response.code, equals(Razorpay.INVALID_OPTIONS));
+          expect(response.code, equals(ResponseCodes.INVALID_OPTIONS));
         }
 
-        razorpay.on(
-            Razorpay.EVENT_PAYMENT_ERROR, expectAsync1(errorHandler, count: 1));
+        razorpay.on(RazorpayEvents.EVENT_PAYMENT_ERROR, expectAsync1(errorHandler, count: 1));
 
         razorpay.open(options);
       });

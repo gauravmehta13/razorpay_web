@@ -1,5 +1,7 @@
-import 'package:flutter/foundation.dart';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:razorpay_web/razorpay_web.dart';
 
 void main() => runApp(const MyApp());
@@ -48,7 +50,7 @@ class _MyAppState extends State<MyApp> {
 
   void openCheckout() async {
     var options = {
-      'key': kDebugMode ? 'rzp_test_1DP5mmOlF5G5ag' : "rzp_live_h33xU21Pn6h51e",
+      'key': 'rzp_test_1DP5mmOlF5G5ag',
       'amount': 100,
       'name': 'Acme Corp.',
       'description': 'Fine T-Shirt',
@@ -67,36 +69,23 @@ class _MyAppState extends State<MyApp> {
   }
 
   void _handlePaymentSuccess(PaymentSuccessResponse response) {
-    print('Payment Id: ${response.paymentId}');
-    print('Order Id: ${response.orderId}');
-    print('Signature: ${response.signature}');
-    // show success message
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('SUCCESS: Payment Id: ${response.paymentId}'),
-      ),
-    );
+    log('Success Response: $response');
+    Fluttertoast.showToast(
+        msg: "SUCCESS: ${response.paymentId!}",
+        toastLength: Toast.LENGTH_SHORT);
   }
 
   void _handlePaymentError(PaymentFailureResponse response) {
-    print('Code: ${response.code}');
-    print('Message: ${response.message}');
-
-    // show error message
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('ERROR: ${response.message}'),
-      ),
-    );
+    log('Error Response: $response');
+    Fluttertoast.showToast(
+        msg: "ERROR: ${response.code} - ${response.message!}",
+        toastLength: Toast.LENGTH_SHORT);
   }
 
   void _handleExternalWallet(ExternalWalletResponse response) {
-    print('EXTERNAL_WALLET: ${response.walletName}');
-    // show external wallet name
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('EXTERNAL_WALLET: ${response.walletName}'),
-      ),
-    );
+    log('External SDK Response: $response');
+    Fluttertoast.showToast(
+        msg: "EXTERNAL_WALLET: ${response.walletName!}",
+        toastLength: Toast.LENGTH_SHORT);
   }
 }
