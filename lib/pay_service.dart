@@ -94,22 +94,26 @@ class PayService {
     jsinterop.JSAny? jsmapFromDart = options.jsify();
 
     /// Now manually insert the function handlers as JS object
-    if (jsmapFromDart != null) {
+    if (jsmapFromDart != null && jsmapFromDart.isA<jsinterop.JSObject>()) {
       // Now manually insert the function handlers into the JS object
-      (jsmapFromDart as jsinterop.JSObject).setProperty('handler'.toJS, handlerFn.toJS);
-      (jsmapFromDart).setProperty('modal.ondismiss'.toJS, dismissFn.toJS);
-      (jsmapFromDart).setProperty('payment.failed'.toJS, onFailedFn.toJS);
+      final jsMap = jsmapFromDart as jsinterop.JSObject;
+      jsMap.setProperty('handler'.toJS, handlerFn.toJS);
+      jsMap.setProperty('modal.ondismiss'.toJS, dismissFn.toJS);
+      jsMap.setProperty('payment.failed'.toJS, onFailedFn.toJS);
     }
 
     /// Retrieving the Object named [Razorpay] from the .js file we received from checkout API
-    jsinterop.JSAny? razorpay = web.window.callMethod('Razorpay'.toJS, jsmapFromDart);
+    jsinterop.JSAny? razorpay =
+        web.window.callMethod('Razorpay'.toJS, jsmapFromDart);
 
-    if (razorpay is jsinterop.JSObject) {
+    if (razorpay != null && razorpay.isA<jsinterop.JSObject>()) {
+      final razorpayObj = razorpay as jsinterop.JSObject;
+
       ///Assigning the onFailedFn to the payment.failed event
-      razorpay.callMethod('on'.toJS, 'payment.failed'.toJS, onFailedFn.toJS);
+      razorpayObj.callMethod('on'.toJS, 'payment.failed'.toJS, onFailedFn.toJS);
 
       ///If no errors captured, then execute the ['open'] method
-      razorpay.callMethod('open'.toJS);
+      razorpayObj.callMethod('open'.toJS);
     }
     return completer.future;
   }

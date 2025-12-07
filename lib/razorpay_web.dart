@@ -1,5 +1,3 @@
-library razorpay_web;
-
 import 'package:eventify/eventify.dart';
 import 'package:flutter/services.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -75,7 +73,8 @@ class Razorpay {
 
       default:
         eventName = 'error';
-        payload = PaymentFailureResponse(ResponseCodes.UNKNOWN_ERROR, 'An unknown error occurred.');
+        payload = PaymentFailureResponse(
+            ResponseCodes.UNKNOWN_ERROR, 'An unknown error occurred.');
     }
 
     _eventEmitter.emit(eventName, null, payload);
@@ -108,7 +107,10 @@ class Razorpay {
   static Map<String, dynamic> _validateOptions(Map<String, dynamic> options) {
     var key = options['key'];
     if (key == null) {
-      return {'success': false, 'message': 'Key is required. Please check if key is present in options.'};
+      return {
+        'success': false,
+        'message': 'Key is required. Please check if key is present in options.'
+      };
     }
     return {'success': true};
   }
