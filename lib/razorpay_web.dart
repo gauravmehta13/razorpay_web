@@ -3,18 +3,26 @@ import 'package:flutter/services.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:universal_platform/universal_platform.dart';
 
-import 'Constants/Constants.dart';
-import 'Models/ExternalWalletResponse.dart';
-import 'Models/PaymentFailureResponse.dart';
-import 'Models/PaymentSuccessResponse.dart';
-
-export './Models/ExternalWalletResponse.dart';
-export './Models/PaymentFailureResponse.dart';
-export './Models/PaymentSuccessResponse.dart';
-export 'Constants/Constants.dart';
-
 /// Flutter plugin for Razorpay SDK
 class Razorpay {
+  // Response codes from platform
+  static const _CODE_PAYMENT_SUCCESS = 0;
+  static const _CODE_PAYMENT_ERROR = 1;
+  static const _CODE_PAYMENT_EXTERNAL_WALLET = 2;
+
+  // Event names
+  static const EVENT_PAYMENT_SUCCESS = 'payment.success';
+  static const EVENT_PAYMENT_ERROR = 'payment.error';
+  static const EVENT_EXTERNAL_WALLET = 'payment.external_wallet';
+
+  // Payment error codes
+  static const NETWORK_ERROR = 0;
+  static const INVALID_OPTIONS = 1;
+  static const PAYMENT_CANCELLED = 2;
+  static const TLS_ERROR = 3;
+  static const INCOMPATIBLE_PLUGIN = 4;
+  static const UNKNOWN_ERROR = 100;
+
   static const MethodChannel _channel = MethodChannel('razorpay_flutter');
 
   // EventEmitter instance used for communication
@@ -30,10 +38,10 @@ class Razorpay {
 
     if (!validationResult['success']) {
       _handleResult({
-        'type': ResponseCodes.CODE_PAYMENT_ERROR,
+        'type': _CODE_PAYMENT_ERROR,
         'data': {
-          'code': ResponseCodes.INVALID_OPTIONS,
-          'message': validationResult['message'],
+          'code': INVALID_OPTIONS,
+          'message': validationResult['message']
         }
       });
       return;
@@ -56,25 +64,25 @@ class Razorpay {
     dynamic payload;
 
     switch (response['type']) {
-      case ResponseCodes.CODE_PAYMENT_SUCCESS:
-        eventName = RazorpayEvents.EVENT_PAYMENT_SUCCESS;
+      case _CODE_PAYMENT_SUCCESS:
+        eventName = EVENT_PAYMENT_SUCCESS;
         payload = PaymentSuccessResponse.fromMap(data!);
         break;
 
-      case ResponseCodes.CODE_PAYMENT_ERROR:
-        eventName = RazorpayEvents.EVENT_PAYMENT_ERROR;
+      case _CODE_PAYMENT_ERROR:
+        eventName = EVENT_PAYMENT_ERROR;
         payload = PaymentFailureResponse.fromMap(data!);
         break;
 
-      case ResponseCodes.CODE_PAYMENT_EXTERNAL_WALLET:
-        eventName = RazorpayEvents.EVENT_EXTERNAL_WALLET;
+      case _CODE_PAYMENT_EXTERNAL_WALLET:
+        eventName = EVENT_EXTERNAL_WALLET;
         payload = ExternalWalletResponse.fromMap(data!);
         break;
 
       default:
         eventName = 'error';
-        payload = PaymentFailureResponse(
-            ResponseCodes.UNKNOWN_ERROR, 'An unknown error occurred.');
+        payload =
+            PaymentFailureResponse(UNKNOWN_ERROR, 'An unknown error occurred.');
     }
 
     _eventEmitter.emit(eventName, null, payload);
@@ -113,5 +121,52 @@ class Razorpay {
       };
     }
     return {'success': true};
+  }
+}
+
+/// Payment response classes
+class PaymentSuccessResponse {
+  /// Payment id
+  String? paymentId;
+
+  /// Order id
+  String? orderId;
+
+  /// Signature
+  String? signature;
+
+  PaymentSuccessResponse(this.paymentId, this.orderId, this.signature);
+
+  static PaymentSuccessResponse fromMap(Map<dynamic, dynamic> map) {
+    String? paymentId = map["razorpay_payment_id"];
+    String? signature = map["razorpay_signature"];
+    String? orderId = map["razorpay_order_id"];
+
+    return PaymentSuccessResponse(paymentId, orderId, signature);
+  }
+}
+
+/// Payment response classes
+class PaymentFailureResponse {
+  int? code;
+  String? message;
+
+  PaymentFailureResponse(this.code, this.message);
+
+  static PaymentFailureResponse fromMap(Map<dynamic, dynamic> map) {
+    var code = map["code"] as int?;
+    var message = map["message"] as String?;
+    return PaymentFailureResponse(code, message);
+  }
+}
+
+class ExternalWalletResponse {
+  String? walletName;
+
+  ExternalWalletResponse(this.walletName);
+
+  static ExternalWalletResponse fromMap(Map<dynamic, dynamic> map) {
+    var walletName = map["external_wallet"] as String?;
+    return ExternalWalletResponse(walletName);
   }
 }
