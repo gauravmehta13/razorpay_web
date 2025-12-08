@@ -1,0 +1,26 @@
+00:00 +0: loading C:/Users/jacks/Documents/GitHub/razorpay_web/test/razorpay_flutter_test.dart
+00:00 +0: Razorpay #open passes options correctly
+00:00 +0 -1: Razorpay #open passes options correctly [E]
+  Binding has not yet been initialized.
+  The "instance" getter on the TestDefaultBinaryMessengerBinding binding mixin is only available once that binding has been initialized.
+  Typically, this is done by calling "WidgetsFlutterBinding.ensureInitialized()" or "runApp()" (the latter calls the former). Typically this call is done in the "void main()" method. The "ensureInitialized" method is idempotent; calling it multiple times is not harmful. After calling that method, the "instance" getter will return the binding.
+  In a test, one can call "TestWidgetsFlutterBinding.ensureInitialized()" as the first line in the test's "main()" method to initialize the binding.
+  If TestDefaultBinaryMessengerBinding is a custom binding mixin, there must also be a custom binding class, like WidgetsFlutterBinding, but that mixes in the selected binding, and that is the class that must be constructed before using the "instance" getter.
+  package:flutter/src/foundation/binding.dart 314:9  BindingBase.checkInstance.<fn>
+  package:flutter/src/foundation/binding.dart 401:6  BindingBase.checkInstance
+  package:flutter_test/src/binding.dart 109:72       TestDefaultBinaryMessengerBinding.instance
+  test\razorpay_flutter_test.dart 15:41              main.<fn>.<fn>
+  
+00:00 +0 -1: Razorpay #open throws error if key is not passed
+00:00 +0 -2: Razorpay #open throws error if key is not passed [E]
+  Binding has not yet been initialized.
+  The "instance" getter on the TestDefaultBinaryMessengerBinding binding mixin is only available once that binding has been initialized.
+  Typically, this is done by calling "WidgetsFlutterBinding.ensureInitialized()" or "runApp()" (the latter calls the former). Typically this call is done in the "void main()" method. The "ensureInitialized" method is idempotent; calling it multiple times is not harmful. After calling that method, the "instance" getter will return the binding.
+  In a test, one can call "TestWidgetsFlutterBinding.ensureInitialized()" as the first line in the test's "main()" method to initialize the binding.
+  If TestDefaultBinaryMessengerBinding is a custom binding mixin, there must also be a custom binding class, like WidgetsFlutterBinding, but that mixes in the selected binding, and that is the class that must be constructed before using the "instance" getter.
+  package:flutter/src/foundation/binding.dart 314:9  BindingBase.checkInstance.<fn>
+  package:flutter/src/foundation/binding.dart 401:6  BindingBase.checkInstance
+  package:flutter_test/src/binding.dart 109:72       TestDefaultBinaryMessengerBinding.instance
+  test\razorpay_flutter_test.dart 15:41              main.<fn>.<fn>
+  
+00:00 +0 -2: Some tests failed.

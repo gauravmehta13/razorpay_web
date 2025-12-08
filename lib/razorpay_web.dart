@@ -3,25 +3,29 @@ import 'package:flutter/services.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:universal_platform/universal_platform.dart';
 
+import 'razorpay_events.dart';
+export 'razorpay_events.dart';
+
 /// Flutter plugin for Razorpay SDK
 class Razorpay {
   // Response codes from platform
-  static const _CODE_PAYMENT_SUCCESS = 0;
-  static const _CODE_PAYMENT_ERROR = 1;
-  static const _CODE_PAYMENT_EXTERNAL_WALLET = 2;
+  static const _CODE_PAYMENT_SUCCESS = ResponseCodes.CODE_PAYMENT_SUCCESS;
+  static const _CODE_PAYMENT_ERROR = ResponseCodes.CODE_PAYMENT_ERROR;
+  static const _CODE_PAYMENT_EXTERNAL_WALLET =
+      ResponseCodes.CODE_PAYMENT_EXTERNAL_WALLET;
 
   // Event names
-  static const EVENT_PAYMENT_SUCCESS = 'payment.success';
-  static const EVENT_PAYMENT_ERROR = 'payment.error';
-  static const EVENT_EXTERNAL_WALLET = 'payment.external_wallet';
+  static const EVENT_PAYMENT_SUCCESS = RazorpayEvents.EVENT_PAYMENT_SUCCESS;
+  static const EVENT_PAYMENT_ERROR = RazorpayEvents.EVENT_PAYMENT_ERROR;
+  static const EVENT_EXTERNAL_WALLET = RazorpayEvents.EVENT_EXTERNAL_WALLET;
 
   // Payment error codes
-  static const NETWORK_ERROR = 0;
-  static const INVALID_OPTIONS = 1;
-  static const PAYMENT_CANCELLED = 2;
-  static const TLS_ERROR = 3;
-  static const INCOMPATIBLE_PLUGIN = 4;
-  static const UNKNOWN_ERROR = 100;
+  static const NETWORK_ERROR = ResponseCodes.NETWORK_ERROR;
+  static const INVALID_OPTIONS = ResponseCodes.INVALID_OPTIONS;
+  static const PAYMENT_CANCELLED = ResponseCodes.PAYMENT_CANCELLED;
+  static const TLS_ERROR = ResponseCodes.TLS_ERROR;
+  static const INCOMPATIBLE_PLUGIN = ResponseCodes.INCOMPATIBLE_PLUGIN;
+  static const UNKNOWN_ERROR = ResponseCodes.UNKNOWN_ERROR;
 
   static const MethodChannel _channel = MethodChannel('razorpay_flutter');
 

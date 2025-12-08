@@ -8,7 +8,7 @@ import 'package:razorpay_web/razorpay_web.dart';
 void main() => runApp(const MyApp());
 
 class MyApp extends StatefulWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -62,7 +62,8 @@ class _MyAppState extends State<MyApp> {
         trailing: IconButton(
           onPressed: () async {
             await Clipboard.setData(ClipboardData(text: text));
-            Fluttertoast.showToast(msg: "Copied to clipboard", toastLength: Toast.LENGTH_SHORT);
+            Fluttertoast.showToast(
+                msg: "Copied to clipboard", toastLength: Toast.LENGTH_SHORT);
             await Future.delayed((const Duration(seconds: 1))).then((_) {
               openCheckout();
             });
@@ -118,13 +119,18 @@ class _MyAppState extends State<MyApp> {
 
   void _handlePaymentSuccess(PaymentSuccessResponse response) {
     log('Success Response: $response');
-    Fluttertoast.showToast(msg: "SUCCESS: ${response.paymentId!}", toastLength: Toast.LENGTH_SHORT);
+    Fluttertoast.showToast(
+        msg: "SUCCESS: ${response.paymentId!}",
+        toastLength: Toast.LENGTH_SHORT);
   }
 
   void _handlePaymentError(PaymentFailureResponse response) {
     log('Error Response: $response');
     Fluttertoast.showToast(
-        msg: "ERROR: ${response.code} - ${response.message!}", toastLength: Toast.LENGTH_SHORT, backgroundColor: const Color(0xFFF44336), webBgColor: "linear-gradient(to right, #F44236, #F44336)");
+        msg: "ERROR: ${response.code} - ${response.message!}",
+        toastLength: Toast.LENGTH_SHORT,
+        backgroundColor: const Color(0xFFF44336),
+        webBgColor: "linear-gradient(to right, #F44236, #F44336)");
   }
 
   void _handleExternalWallet(ExternalWalletResponse response) {
