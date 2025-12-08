@@ -1,5 +1,0 @@
-Analyzing razorpay_web...                                       
-
-  error - Undefined name 'ResponseCodes' - test\razorpay_flutter_test.dart:55:40 - undefined_identifier
-  error - Undefined name 'RazorpayEvents' - test\razorpay_flutter_test.dart:58:21 - undefined_identifier
-
