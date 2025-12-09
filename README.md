@@ -19,7 +19,7 @@ Flutter Razorpay Plugin
 
 ![image](https://user-images.githubusercontent.com/14369357/48184454-17c1bc80-e358-11e8-8821-269a30935a68.png)
 
-A flutter plugin for razorpay integration for Web , Android and iOS.
+A flutter plugin for razorpay integration for Web, Android, iOS, and Windows.
 
 
 <p align="center">
@@ -52,6 +52,8 @@ The following documentation is only focused on the wrapper around our native And
 
 **Web**: In your index.html file, add the script in body tag. (See example project>web>index.html)
 <script id="rzp-jssdk" src="https://checkout.razorpay.com/v1/checkout.js" defer></script>
+
+**Windows**: Uses flutter_inappwebview to load Razorpay web checkout. Requires Microsoft Edge WebView2 Runtime (pre-installed on most Windows 10/11 systems).
 
 To know more about Razorpay payment flow and steps involved, read up here: [https://razorpay.com/docs/](https://razorpay.com/docs/)
 
@@ -166,8 +168,14 @@ A detailed list of options can be found [here](https://razorpay.com/docs/payment
 #### Open Checkout
 
 ```dart
+// For Android, iOS, and Web
 _razorpay.open(options);
+
+// For Windows (context is required)
+_razorpay.open(options, context: context);
 ```
+
+> **Note for Windows**: The `context` parameter is required on Windows to display the payment dialog. On other platforms, it's optional.
 
 ## Troubleshooting
 
@@ -245,12 +253,16 @@ Check the signatures of the callbacks for payment events. They should match the 
 
 ### Razorpay
 
-#### open(map<String, dynamic> options)
+#### open(map<String, dynamic> options, {BuildContext? context})
 
 Open Razorpay Checkout.
 
 The `options` map has `key` as a required property. All other properties are optional.
 For a complete list of options, please see [the Checkout documentation](https://razorpay.com/docs/payment-gateway/integrations-guide/checkout/standard/#checkout-form).
+
+**Parameters:**
+- `options`: Payment options including key, amount, description, etc.
+- `context`: BuildContext required for Windows platform to show the payment dialog. Optional for Android, iOS, and Web.
 
 #### on(String eventName, Function listener)
 

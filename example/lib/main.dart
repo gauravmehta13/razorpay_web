@@ -2,7 +2,6 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:razorpay_web/razorpay_web.dart';
 
 void main() => runApp(const MyApp());
@@ -16,13 +15,18 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   late Razorpay _razorpay;
+  final GlobalKey<ScaffoldMessengerState> _scaffoldMessengerKey =
+      GlobalKey<ScaffoldMessengerState>();
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
-        appBar: appBar(),
-        body: body(),
+      scaffoldMessengerKey: _scaffoldMessengerKey,
+      home: Builder(
+        builder: (context) => Scaffold(
+          appBar: appBar(),
+          body: body(context),
+        ),
       ),
     );
   }
@@ -33,19 +37,19 @@ class _MyAppState extends State<MyApp> {
     );
   }
 
-  Widget body() {
+  Widget body(BuildContext context) {
     return Container(
         padding: const EdgeInsets.all(20),
         child: Column(
           children: <Widget>[
-            listtile(true),
-            listtile(false),
-            payButton(),
+            listtile(context, true),
+            listtile(context, false),
+            payButton(context),
           ],
         ));
   }
 
-  Widget listtile(bool isSucess) {
+  Widget listtile(BuildContext context, bool isSucess) {
     ///Reference: https://razorpay.com/docs/payments/payments/test-upi-details/
     String text = isSucess ? 'success@razorpay' : 'failure@razorpay';
     return Padding(
@@ -62,10 +66,9 @@ class _MyAppState extends State<MyApp> {
         trailing: IconButton(
           onPressed: () async {
             await Clipboard.setData(ClipboardData(text: text));
-            Fluttertoast.showToast(
-                msg: "Copied to clipboard", toastLength: Toast.LENGTH_SHORT);
+            _showSnackBar("Copied to clipboard");
             await Future.delayed((const Duration(seconds: 1))).then((_) {
-              openCheckout();
+              openCheckout(context);
             });
           },
           tooltip: 'Copy',
@@ -75,9 +78,9 @@ class _MyAppState extends State<MyApp> {
     );
   }
 
-  Widget payButton() {
+  Widget payButton(BuildContext context) {
     return ElevatedButton(
-      onPressed: openCheckout,
+      onPressed: () => openCheckout(context),
       child: const Text('Pay'),
     );
   }
@@ -97,7 +100,7 @@ class _MyAppState extends State<MyApp> {
     _razorpay.clear();
   }
 
-  void openCheckout() async {
+  void openCheckout(BuildContext context) async {
     var options = {
       'key': 'rzp_test_1DP5mmOlF5G5ag',
       'amount': 100,
@@ -111,7 +114,8 @@ class _MyAppState extends State<MyApp> {
     };
 
     try {
-      _razorpay.open(options);
+      // Pass context for Windows platform support
+      _razorpay.open(options, context: context);
     } catch (e) {
       debugPrint('Error: e');
     }
@@ -119,25 +123,32 @@ class _MyAppState extends State<MyApp> {
 
   void _handlePaymentSuccess(PaymentSuccessResponse response) {
     log('Success Response: $response');
-    Fluttertoast.showToast(
-        msg: "SUCCESS: ${response.paymentId!}",
-        toastLength: Toast.LENGTH_SHORT);
+    _showSnackBar(
+      "SUCCESS: ${response.paymentId!}",
+      backgroundColor: Colors.green,
+    );
   }
 
   void _handlePaymentError(PaymentFailureResponse response) {
-    log('Error Response: $response');
-    Fluttertoast.showToast(
-        msg: "ERROR: ${response.code} - ${response.message!}",
-        toastLength: Toast.LENGTH_SHORT,
-        backgroundColor: const Color(0xFFF44336),
-        webBgColor: "linear-gradient(to right, #F44236, #F44336)");
+    log('Error Response: ${response.message}');
+    _showSnackBar(
+      "ERROR: ${response.code} - ${response.message!}",
+      backgroundColor: Colors.red,
+    );
   }
 
   void _handleExternalWallet(ExternalWalletResponse response) {
     log('External SDK Response: $response');
-    Fluttertoast.showToast(
-      msg: "EXTERNAL_WALLET: ${response.walletName!}",
-      toastLength: Toast.LENGTH_SHORT,
+    _showSnackBar("EXTERNAL_WALLET: ${response.walletName!}");
+  }
+
+  void _showSnackBar(String message, {Color? backgroundColor}) {
+    _scaffoldMessengerKey.currentState?.showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: backgroundColor,
+        duration: const Duration(seconds: 2),
+      ),
     );
   }
 }

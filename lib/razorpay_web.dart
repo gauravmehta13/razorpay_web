@@ -1,9 +1,11 @@
 import 'package:eventify/eventify.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:universal_platform/universal_platform.dart';
 
 import 'razorpay_events.dart';
+import 'razorpay_flutter_windows.dart';
 export 'razorpay_events.dart';
 
 /// Flutter plugin for Razorpay SDK
@@ -37,7 +39,11 @@ class Razorpay {
   }
 
   /// Opens Razorpay checkout
-  void open(Map<String, dynamic> options) async {
+  ///
+  /// [options] - Payment options including key, amount, description, etc.
+  /// [context] - BuildContext required for Windows platform to show the payment dialog.
+  ///             Optional for Android, iOS, and Web platforms.
+  void open(Map<String, dynamic> options, {BuildContext? context}) async {
     Map<String, dynamic> validationResult = _validateOptions(options);
 
     if (!validationResult['success']) {
@@ -48,6 +54,25 @@ class Razorpay {
           'message': validationResult['message']
         }
       });
+      return;
+    }
+
+    // Handle Windows platform via InAppWebView
+    if (UniversalPlatform.isWindows) {
+      if (context == null) {
+        _handleResult({
+          'type': _CODE_PAYMENT_ERROR,
+          'data': {
+            'code': INVALID_OPTIONS,
+            'message':
+                'BuildContext is required for Windows platform. Please pass context parameter to open() method.'
+          }
+        });
+        return;
+      }
+      final windowsPlugin = RazorpayFlutterWindows();
+      var response = await windowsPlugin.open(context, options);
+      _handleResult(response);
       return;
     }
 
@@ -109,6 +134,11 @@ class Razorpay {
 
   /// Retrieves lost responses from platform
   void _resync() async {
+    // Skip resync for Windows and Web as they don't use method channels
+    if (UniversalPlatform.isWindows || UniversalPlatform.isWeb) {
+      return;
+    }
+
     var response = await _channel.invokeMethod('resync');
     if (response != null) {
       _handleResult(response);

@@ -21,6 +21,7 @@ dependencies:
   package_info_plus: ^9.0.0
   universal_platform: ^1.0.0+1
   web:
+  flutter_inappwebview: ^6.1.5
 
 dev_dependencies:
   flutter_test:
@@ -40,4 +41,6 @@ flutter:
         web:
             pluginClass: RazorpayFlutterPlugin
             fileName: razorpay_flutter_web.dart
+        windows:
+            dartPluginClass: RazorpayFlutterWindows
 
