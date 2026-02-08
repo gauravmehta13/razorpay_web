@@ -1,3 +1,7 @@
+## 3.1.2
+- Stable release with all features from 3.1.1
+- Updated dependencies and documentation
+
 ## 3.1.1
 - **macOS Support**: Fixed MissingPluginException for macOS platform
   - Added proper platform detection for macOS in `_resync()` method
