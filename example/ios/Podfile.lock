@@ -1,30 +1,56 @@
 PODS:
   - Flutter (1.0.0)
+  - flutter_inappwebview_ios (0.0.1):
+    - Flutter
+    - flutter_inappwebview_ios/Core (= 0.0.1)
+    - swift-collections (~> 1.1.1)
+  - flutter_inappwebview_ios/Core (0.0.1):
+    - Flutter
+    - swift-collections (~> 1.1.1)
   - fluttertoast (0.0.2):
     - Flutter
-    - Toast
+  - InternalCollectionsUtilities (1.1.1)
   - package_info_plus (0.4.5):
     - Flutter
   - razorpay-pod (1.3.2)
   - razorpay_web (1.1.10):
     - Flutter
     - razorpay-pod
-  - Toast (4.0.0)
+  - swift-collections (1.1.1):
+    - swift-collections/BitCollections (= 1.1.1)
+    - swift-collections/DequeModule (= 1.1.1)
+    - swift-collections/HashTreeCollections (= 1.1.1)
+    - swift-collections/HeapModule (= 1.1.1)
+    - swift-collections/OrderedCollections (= 1.1.1)
+  - swift-collections/BitCollections (1.1.1):
+    - InternalCollectionsUtilities (= 1.1.1)
+  - swift-collections/DequeModule (1.1.1):
+    - InternalCollectionsUtilities (= 1.1.1)
+  - swift-collections/HashTreeCollections (1.1.1):
+    - InternalCollectionsUtilities (= 1.1.1)
+  - swift-collections/HeapModule (1.1.1):
+    - InternalCollectionsUtilities (= 1.1.1)
+  - swift-collections/OrderedCollections (1.1.1):
+    - InternalCollectionsUtilities (= 1.1.1)
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
+  - flutter_inappwebview_ios (from `.symlinks/plugins/flutter_inappwebview_ios/ios`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
   - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
   - razorpay_web (from `.symlinks/plugins/razorpay_web/ios`)
 
 SPEC REPOS:
   trunk:
+    - InternalCollectionsUtilities
     - razorpay-pod
-    - Toast
+    - swift-collections
 
 EXTERNAL SOURCES:
   Flutter:
     :path: Flutter
+  flutter_inappwebview_ios:
+    :path: ".symlinks/plugins/flutter_inappwebview_ios/ios"
   fluttertoast:
     :path: ".symlinks/plugins/fluttertoast/ios"
   package_info_plus:
@@ -33,13 +59,15 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/razorpay_web/ios"
 
 SPEC CHECKSUMS:
-  Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
-  fluttertoast: fafc4fa4d01a6a9e4f772ecd190ffa525e9e2d9c
-  package_info_plus: fd030dabf36271f146f1f3beacd48f564b0f17f7
+  Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
+  flutter_inappwebview_ios: 4ba92d0d329027e39735ff0c5d5dc8bd4d1ada99
+  fluttertoast: 21eecd6935e7064cc1fcb733a4c5a428f3f24f0f
+  InternalCollectionsUtilities: af3f471602c4a67cbcb0bee0a80f6f55a33ae453
+  package_info_plus: c0502532a26c7662a62a356cebe2692ec5fe4ec4
   razorpay-pod: b129f60de5f0d0952bebfb9480a10909d4fd6b6d
   razorpay_web: 4338051683c7e262b1defcf27c29d121ad7049d4
-  Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
+  swift-collections: ba248ecaf44ef500b27d5cf94d304218c89892ff
 
-PODFILE CHECKSUM: ef19549a9bc3046e7bb7d2fab4d021637c0c58a3
+PODFILE CHECKSUM: 0dbd5a87e0ace00c9610d2037ac22083a01f861d
 
-COCOAPODS: 1.11.3
+COCOAPODS: 1.16.2
