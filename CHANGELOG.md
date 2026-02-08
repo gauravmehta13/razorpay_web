@@ -1,3 +1,20 @@
+## 1.5.0
+- **Major Update**: Added Windows platform support using flutter_inappwebview
+- **New Platforms**: Added Linux and macOS example implementations
+- **Android Migration**: Converted Android implementation from Java to Kotlin
+- **Code Refactoring**: Reorganized codebase structure
+  - Consolidated Constants and Models into main library files
+  - Added `razorpay_events.dart` for better event handling
+  - Removed separate Constants and Models folders
+- **Enhanced Documentation**: Updated README with Windows-specific instructions and requirements
+- **Build System Updates**: 
+  - Updated Android Gradle configuration
+  - Added Kotlin support for Android
+  - Added build configurations for all platforms
+- **Example App**: Updated example app to support Windows, Linux, and macOS platforms
+- **Dependencies**: Updated flutter_inappwebview to ^6.1.5 for Windows support
+- **Bug Fixes**: Various performance improvements and bug fixes
+
 ## 1.4.2
 - Updated Description
 ## 1.4.1
