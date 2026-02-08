@@ -77,18 +77,70 @@ class RazorpayFlutterWebView {
 <html>
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Razorpay Checkout</title>
   <style>
-    body {
+    * {
       margin: 0;
       padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: #f5f5f5;
+      box-sizing: border-box;
+    }
+    
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: transparent;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    #loading {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      color: #666;
+    }
+    
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid #f0f0f0;
+      border-top-color: #528ff0;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    /* Override Razorpay modal styles for better integration */
+    .razorpay-container {
+      position: fixed !important;
+      top: 0 !important;
+      left: 0 !important;
+      width: 100% !important;
+      height: 100% !important;
+      z-index: 999999 !important;
     }
   </style>
 </head>
 <body>
+  <div id="loading">
+    <div class="spinner"></div>
+    <div>Loading payment...</div>
+  </div>
+  
   <script>
     // Create and load Razorpay script
     var script = document.createElement('script');
@@ -101,12 +153,9 @@ class RazorpayFlutterWebView {
     
     script.onerror = function(e) {
       console.error('Failed to load Razorpay script');
-      if (window.flutter_inappwebview) {
-        window.flutter_inappwebview.callHandler('onPaymentError', JSON.stringify({
-          code: 'SCRIPT_LOAD_ERROR',
-          description: 'Failed to load Razorpay. Check internet connection.'
-        }));
-      }
+      document.getElementById('loading').innerHTML = '<div style="color: #e74c3c; text-align: center;"><div style="font-size: 48px; margin-bottom: 16px;">⚠️</div><div>Failed to load payment gateway</div><div style="font-size: 14px; margin-top: 8px; color: #999;">Please check your internet connection</div></div>';
+      
+      window.location.href = 'razorpay://error?code=SCRIPT_LOAD_ERROR&description=' + encodeURIComponent('Failed to load Razorpay');
     };
     
     document.head.appendChild(script);
@@ -119,37 +168,49 @@ class RazorpayFlutterWebView {
         
         var options = $optionsJson;
         
+        // Configure modal to be embedded
+        if (!options.modal) options.modal = {};
+        options.modal.backdropclose = false;
+        options.modal.escape = false;
+        
         options.handler = function(response) {
-          if (window.flutter_inappwebview) {
-            window.flutter_inappwebview.callHandler('onPaymentSuccess', JSON.stringify(response));
+          console.log('Payment success:', response);
+          var params = 'razorpay_payment_id=' + encodeURIComponent(response.razorpay_payment_id || '');
+          if (response.razorpay_order_id) {
+            params += '&razorpay_order_id=' + encodeURIComponent(response.razorpay_order_id);
           }
+          if (response.razorpay_signature) {
+            params += '&razorpay_signature=' + encodeURIComponent(response.razorpay_signature);
+          }
+          window.location.href = 'razorpay://success?' + params;
         };
         
-        if (!options.modal) options.modal = {};
         options.modal.ondismiss = function() {
-          if (window.flutter_inappwebview) {
-            window.flutter_inappwebview.callHandler('onPaymentDismiss', '');
-          }
+          console.log('Payment dismissed');
+          window.location.href = 'razorpay://dismiss';
         };
         
         var rzp = new Razorpay(options);
         
         rzp.on('payment.failed', function(response) {
-          if (window.flutter_inappwebview) {
-            window.flutter_inappwebview.callHandler('onPaymentError', JSON.stringify(response.error));
-          }
+          console.log('Payment failed:', response);
+          var error = response.error || {};
+          var params = 'code=' + encodeURIComponent(error.code || 'UNKNOWN_ERROR');
+          params += '&description=' + encodeURIComponent(error.description || 'Payment failed');
+          window.location.href = 'razorpay://error?' + params;
         });
         
+        // Hide loading indicator
+        document.getElementById('loading').style.display = 'none';
+        
+        // Open Razorpay checkout
         rzp.open();
         
       } catch (error) {
         console.error('Initialization error:', error);
-        if (window.flutter_inappwebview) {
-          window.flutter_inappwebview.callHandler('onPaymentError', JSON.stringify({
-            code: 'INIT_ERROR',
-            description: error.message
-          }));
-        }
+        document.getElementById('loading').innerHTML = '<div style="color: #e74c3c; text-align: center;"><div style="font-size: 48px; margin-bottom: 16px;">⚠️</div><div>Payment initialization failed</div><div style="font-size: 14px; margin-top: 8px; color: #999;">' + error.message + '</div></div>';
+        
+        window.location.href = 'razorpay://error?code=INIT_ERROR&description=' + encodeURIComponent(error.message);
       }
     }
   </script>
@@ -176,222 +237,163 @@ class _RazorpayWebViewDialog extends StatefulWidget {
 }
 
 class _RazorpayWebViewDialogState extends State<_RazorpayWebViewDialog> {
-
+  void _handleCustomSchemeUrl(String url) {
+    final uri = Uri.parse(url);
+    
+    if (uri.host == 'success') {
+      // Payment success
+      final paymentId = uri.queryParameters['razorpay_payment_id'] ?? '';
+      final orderId = uri.queryParameters['razorpay_order_id'];
+      final signature = uri.queryParameters['razorpay_signature'];
+      
+      widget.onResult({
+        'type': ResponseCodes.CODE_PAYMENT_SUCCESS,
+        'data': {
+          'razorpay_payment_id': paymentId,
+          if (orderId != null) 'razorpay_order_id': orderId,
+          if (signature != null) 'razorpay_signature': signature,
+        },
+      });
+    } else if (uri.host == 'error') {
+      // Payment error
+      final code = uri.queryParameters['code'] ?? ResponseCodes.UNKNOWN_ERROR;
+      final description = uri.queryParameters['description'] ?? 'Payment failed';
+      
+      widget.onResult({
+        'type': ResponseCodes.CODE_PAYMENT_ERROR,
+        'data': {
+          'code': code,
+          'message': description,
+        },
+      });
+    } else if (uri.host == 'dismiss') {
+      // Payment dismissed
+      widget.onDismiss();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    final screenSize = MediaQuery.of(context).size;
+    final dialogWidth = screenSize.width > 500 ? 480.0 : screenSize.width - 32;
+    final dialogHeight = screenSize.height > 750 ? 720.0 : screenSize.height - 80;
+
     return Dialog(
+      backgroundColor: Colors.transparent,
       insetPadding: const EdgeInsets.all(16),
       child: Container(
-        width: 600,
-        height: 700,
+        width: dialogWidth,
+        height: dialogHeight,
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Column(
-          children: [
-            // Header with close button
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              decoration: BoxDecoration(
-                color: Colors.grey.shade100,
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(12),
-                  topRight: Radius.circular(12),
-                ),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    'Complete Payment',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  IconButton(
-                    onPressed: widget.onDismiss,
-                    icon: const Icon(Icons.close),
-                    tooltip: 'Cancel payment',
-                  ),
-                ],
-              ),
-            ),
-            // WebView
-            Expanded(
-              child: ClipRRect(
-                borderRadius: const BorderRadius.only(
-                  bottomLeft: Radius.circular(12),
-                  bottomRight: Radius.circular(12),
-                ),
-                child: InAppWebView(
-                  initialData: InAppWebViewInitialData(
-                    data: RazorpayFlutterWebView._generateCheckoutHtml(
-                      widget.options,
-                    ),
-                    mimeType: 'text/html',
-                    encoding: 'utf-8',
-                    baseUrl: WebUri('https://checkout.razorpay.com'),
-                  ),
-                  initialSettings: InAppWebViewSettings(
-                    javaScriptEnabled: true,
-                    javaScriptCanOpenWindowsAutomatically: true,
-                    supportMultipleWindows: true,
-                    mediaPlaybackRequiresUserGesture: false,
-                    allowsInlineMediaPlayback: true,
-                    mixedContentMode:
-                        MixedContentMode.MIXED_CONTENT_ALWAYS_ALLOW,
-                  ),
-                  onWebViewCreated: (controller) {
-                    _setupJavaScriptHandlers(controller);
-                  },
-                  onLoadStart: (controller, url) {
-                    debugPrint('WebView loading: $url');
-                  },
-                  onLoadStop: (controller, url) {
-                    debugPrint('WebView loaded: $url');
-                  },
-                  onReceivedError: (controller, request, error) {
-                    debugPrint('WebView error: ${error.description}');
-                  },
-                  onConsoleMessage: (controller, consoleMessage) {
-                    debugPrint('WebView console: ${consoleMessage.message}');
-                  },
-                  onCreateWindow: (controller, createWindowAction) async {
-                    // Razorpay opens its checkout in a popup window
-                    debugPrint('Razorpay opening popup window');
-
-                    // Show the popup WebView in a new dialog
-                    if (context.mounted) {
-                      showDialog(
-                        context: context,
-                        barrierDismissible: false,
-                        builder: (popupContext) {
-                          return Dialog(
-                            child: SizedBox(
-                              width: 900,
-                              height: 600,
-                              child: Column(
-                                children: [
-                                  // Header
-                                  Container(
-                                    padding: const EdgeInsets.all(12),
-                                    color: Colors.grey.shade100,
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        const Text('Razorpay Checkout',
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold)),
-                                        IconButton(
-                                          icon: const Icon(Icons.close),
-                                          onPressed: () {
-                                            Navigator.of(popupContext).pop();
-                                            widget.onDismiss();
-                                          },
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  // Popup WebView
-                                  Expanded(
-                                    child: InAppWebView(
-                                      windowId: createWindowAction.windowId,
-                                      initialSettings: InAppWebViewSettings(
-                                        javaScriptEnabled: true,
-                                      ),
-                                      onCloseWindow: (popupController) {
-                                        debugPrint('Popup closed');
-                                        Navigator.of(popupContext).pop();
-                                      },
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
-                        },
-                      );
-                    }
-
-                    return true;
-                  },
-                ),
-              ),
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.2),
+              blurRadius: 20,
+              offset: const Offset(0, 10),
             ),
           ],
         ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(16),
+          child: InAppWebView(
+            initialData: InAppWebViewInitialData(
+              data: RazorpayFlutterWebView._generateCheckoutHtml(
+                widget.options,
+              ),
+              mimeType: 'text/html',
+              encoding: 'utf-8',
+              baseUrl: WebUri('https://checkout.razorpay.com'),
+            ),
+            initialSettings: InAppWebViewSettings(
+              javaScriptEnabled: true,
+              javaScriptCanOpenWindowsAutomatically: true,
+              supportMultipleWindows: true,
+              mediaPlaybackRequiresUserGesture: false,
+              allowsInlineMediaPlayback: true,
+              mixedContentMode: MixedContentMode.MIXED_CONTENT_ALWAYS_ALLOW,
+              transparentBackground: true,
+            ),
+            shouldOverrideUrlLoading: (controller, navigationAction) async {
+              final url = navigationAction.request.url.toString();
+              debugPrint('URL navigation: $url');
+              
+              // Intercept custom scheme URLs for payment callbacks
+              if (url.startsWith('razorpay://')) {
+                _handleCustomSchemeUrl(url);
+                return NavigationActionPolicy.CANCEL;
+              }
+              
+              return NavigationActionPolicy.ALLOW;
+            },
+            onLoadStart: (controller, url) {
+              debugPrint('WebView loading: $url');
+            },
+            onLoadStop: (controller, url) {
+              debugPrint('WebView loaded: $url');
+            },
+            onReceivedError: (controller, request, error) {
+              debugPrint('WebView error: ${error.description}');
+            },
+            onConsoleMessage: (controller, consoleMessage) {
+              debugPrint('WebView console: ${consoleMessage.message}');
+            },
+            onCreateWindow: (controller, createWindowAction) async {
+              // Razorpay opens its checkout in a popup window
+              debugPrint('Razorpay opening popup window');
+
+              // Show the popup WebView in a new dialog
+              if (context.mounted) {
+                showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (popupContext) {
+                    final popupWidth = screenSize.width > 500 ? 480.0 : screenSize.width - 32;
+                    final popupHeight = screenSize.height > 750 ? 720.0 : screenSize.height - 80;
+
+                    return Dialog(
+                      backgroundColor: Colors.transparent,
+                      insetPadding: const EdgeInsets.all(16),
+                      child: Container(
+                        width: popupWidth,
+                        height: popupHeight,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(16),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.2),
+                              blurRadius: 20,
+                              offset: const Offset(0, 10),
+                            ),
+                          ],
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(16),
+                          child: InAppWebView(
+                            windowId: createWindowAction.windowId,
+                            initialSettings: InAppWebViewSettings(
+                              javaScriptEnabled: true,
+                              transparentBackground: true,
+                            ),
+                            onCloseWindow: (popupController) {
+                              debugPrint('Popup closed');
+                              Navigator.of(popupContext).pop();
+                            },
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                );
+              }
+
+              return true;
+            },
+          ),
+        ),
       ),
-    );
-  }
-
-  void _setupJavaScriptHandlers(InAppWebViewController controller) {
-    // Handle payment success
-    controller.addJavaScriptHandler(
-      handlerName: 'onPaymentSuccess',
-      callback: (args) {
-        if (args.isNotEmpty) {
-          try {
-            final response = jsonDecode(args[0] as String);
-            widget.onResult({
-              'type': ResponseCodes.CODE_PAYMENT_SUCCESS,
-              'data': {
-                'razorpay_payment_id': response['razorpay_payment_id'],
-                'razorpay_order_id': response['razorpay_order_id'],
-                'razorpay_signature': response['razorpay_signature'],
-              },
-            });
-          } catch (e) {
-            debugPrint('Error parsing success response: $e');
-            widget.onResult({
-              'type': ResponseCodes.CODE_PAYMENT_SUCCESS,
-              'data': {'razorpay_payment_id': args[0]},
-            });
-          }
-        }
-        return null;
-      },
-    );
-
-    // Handle payment error
-    controller.addJavaScriptHandler(
-      handlerName: 'onPaymentError',
-      callback: (args) {
-        if (args.isNotEmpty) {
-          try {
-            final error = jsonDecode(args[0] as String);
-            widget.onResult({
-              'type': ResponseCodes.CODE_PAYMENT_ERROR,
-              'data': {
-                'code': ResponseCodes.BASE_REQUEST_ERROR,
-                'message': error['description'] ?? 'Payment failed',
-              },
-            });
-          } catch (e) {
-            debugPrint('Error parsing error response: $e');
-            widget.onResult({
-              'type': ResponseCodes.CODE_PAYMENT_ERROR,
-              'data': {
-                'code': ResponseCodes.UNKNOWN_ERROR,
-                'message': args[0]?.toString() ?? 'Payment failed',
-              },
-            });
-          }
-        }
-        return null;
-      },
-    );
-
-    // Handle payment dismiss
-    controller.addJavaScriptHandler(
-      handlerName: 'onPaymentDismiss',
-      callback: (args) {
-        widget.onDismiss();
-        return null;
-      },
     );
   }
 }
