@@ -11,7 +11,7 @@ Provides a unified API for accepting payments through Razorpay across Android, i
 - Multi-platform payment processing (Android, iOS, Web, Windows, Linux, macOS)
 - Event-based payment flow handling (success, error, external wallet)
 - Native SDK wrappers for Android and iOS
-- WebView-based implementation for Windows using InAppWebView
+- WebView-based implementation for Windows, Linux, and macOS using InAppWebView
 - Web implementation using Razorpay's JavaScript checkout
 - Test mode support for sandbox testing
 

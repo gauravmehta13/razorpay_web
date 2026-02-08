@@ -44,6 +44,16 @@
 - **Requirements**: Microsoft Edge WebView2 Runtime
 - **Architecture**: Dialog-based WebView wrapper
 
+### macOS
+- **Implementation**: InAppWebView with HTML/JavaScript (same as Windows)
+- **Requirements**: Network client entitlement for WebView
+- **Architecture**: Dialog-based WebView wrapper
+- **Entitlements**: `com.apple.security.network.client` required
+
+### Linux
+- **Implementation**: InAppWebView with HTML/JavaScript (same as Windows)
+- **Architecture**: Dialog-based WebView wrapper
+
 ## Common Commands
 
 ### Development

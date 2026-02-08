@@ -171,9 +171,37 @@ No additional configuration needed! The plugin uses `flutter_inappwebview` to pr
 </details>
 
 <details>
-<summary><b>🐧 Linux & 🍏 macOS Setup</b></summary>
+<summary><b>🐧 Linux Setup</b></summary>
 
 Uses the same WebView implementation as Windows. No additional setup required.
+
+</details>
+
+<details>
+<summary><b>🍏 macOS Setup</b></summary>
+
+#### Requirements
+Uses the same WebView implementation as Windows.
+
+#### Entitlements Configuration
+
+Add network client permission to your entitlements files:
+
+**`macos/Runner/DebugProfile.entitlements`:**
+```xml
+<key>com.apple.security.network.client</key>
+<true/>
+```
+
+**`macos/Runner/Release.entitlements`:**
+```xml
+<key>com.apple.security.network.client</key>
+<true/>
+```
+
+This is required for the WebView to load Razorpay's checkout page.
+
+> ⚠️ **Important**: You must pass `context` parameter when calling `open()` on macOS.
 
 </details>
 
@@ -679,6 +707,37 @@ BuildContext is required for Windows platform
 Always pass `context` when calling `open()` on Windows:
 ```dart
 _razorpay.open(options, context: context);
+```
+
+</details>
+
+<details>
+<summary><b>macOS: WebView blank or crashing</b></summary>
+
+**Error:**
+```
+onWebContentProcessDidTerminate
+```
+
+**Solution:**
+Add network client entitlement to both entitlements files:
+
+**`macos/Runner/DebugProfile.entitlements`:**
+```xml
+<key>com.apple.security.network.client</key>
+<true/>
+```
+
+**`macos/Runner/Release.entitlements`:**
+```xml
+<key>com.apple.security.network.client</key>
+<true/>
+```
+
+Then rebuild your app:
+```bash
+flutter clean
+flutter build macos
 ```
 
 </details>

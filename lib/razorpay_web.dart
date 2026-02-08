@@ -41,7 +41,7 @@ class Razorpay {
   /// Opens Razorpay checkout
   ///
   /// [options] - Payment options including key, amount, description, etc.
-  /// [context] - BuildContext required for Windows platform to show the payment dialog.
+  /// [context] - BuildContext required for Windows and macOS platforms to show the payment dialog.
   ///             Optional for Android, iOS, and Web platforms.
   void open(Map<String, dynamic> options, {BuildContext? context}) async {
     Map<String, dynamic> validationResult = _validateOptions(options);
@@ -57,15 +57,15 @@ class Razorpay {
       return;
     }
 
-    // Handle Windows platform via InAppWebView
-    if (UniversalPlatform.isWindows) {
+    // Handle Windows and macOS platforms via InAppWebView
+    if (UniversalPlatform.isWindows || UniversalPlatform.isMacOS) {
       if (context == null) {
         _handleResult({
           'type': _CODE_PAYMENT_ERROR,
           'data': {
             'code': INVALID_OPTIONS,
             'message':
-                'BuildContext is required for Windows platform. Please pass context parameter to open() method.'
+                'BuildContext is required for Windows and macOS platforms. Please pass context parameter to open() method.'
           }
         });
         return;
@@ -134,8 +134,8 @@ class Razorpay {
 
   /// Retrieves lost responses from platform
   void _resync() async {
-    // Skip resync for Windows and Web as they don't use method channels
-    if (UniversalPlatform.isWindows || UniversalPlatform.isWeb) {
+    // Skip resync for Windows, macOS, and Web as they don't use method channels
+    if (UniversalPlatform.isWindows || UniversalPlatform.isMacOS || UniversalPlatform.isWeb) {
       return;
     }
 

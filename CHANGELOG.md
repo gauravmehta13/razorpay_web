@@ -1,3 +1,14 @@
+## 3.1.1
+- **macOS Support**: Fixed MissingPluginException for macOS platform
+  - Added proper platform detection for macOS in `_resync()` method
+  - Updated `open()` method to handle macOS using WebView implementation
+  - macOS now uses the same InAppWebView approach as Windows and Linux
+  - Added network client entitlements to example app for WebView support
+  - Fixed WebView blank/crash issue by adding required macOS entitlements
+- **Documentation**: Updated README and tech docs with macOS setup requirements
+  - Added macOS-specific setup section with entitlements configuration
+  - Added troubleshooting guide for WebView issues on macOS
+
 ## 3.1.0
 - **Major Update**: Added Windows platform support using flutter_inappwebview
 - **New Platforms**: Added Linux and macOS example implementations
