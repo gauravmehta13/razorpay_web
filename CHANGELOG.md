@@ -1,4 +1,4 @@
-## 1.5.0
+## 3.1.0
 - **Major Update**: Added Windows platform support using flutter_inappwebview
 - **New Platforms**: Added Linux and macOS example implementations
 - **Android Migration**: Converted Android implementation from Java to Kotlin
@@ -14,6 +14,9 @@
 - **Example App**: Updated example app to support Windows, Linux, and macOS platforms
 - **Dependencies**: Updated flutter_inappwebview to ^6.1.5 for Windows support
 - **Bug Fixes**: Various performance improvements and bug fixes
+
+## 1.5.0
+- Skipped version
 
 ## 1.4.2
 - Updated Description
