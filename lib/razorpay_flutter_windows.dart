@@ -176,6 +176,8 @@ class _RazorpayWebViewDialog extends StatefulWidget {
 }
 
 class _RazorpayWebViewDialogState extends State<_RazorpayWebViewDialog> {
+  bool _isLoading = true;
+
   @override
   Widget build(BuildContext context) {
     return Dialog(
