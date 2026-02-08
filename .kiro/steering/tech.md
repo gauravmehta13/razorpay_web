@@ -11,7 +11,7 @@
 - `package_info_plus: ^9.0.0` - Package information retrieval
 - `universal_platform: ^1.1.0` - Cross-platform detection
 - `web: ^1.1.1` - Web platform support
-- `flutter_inappwebview: ^6.1.5` - WebView for Windows implementation
+- `flutter_inappwebview: ^6.2.0-beta.3` - WebView for Windows, macOS, and Linux implementation
 
 ## Development Dependencies
 - `flutter_test` - Flutter testing framework
