@@ -1,2 +1,43 @@
 {
+  "dart.lineLength": 120,
+  "dart.closingLabels": true,
+  "dart.previewFlutterUiGuides": true,
+  "dart.previewFlutterUiGuidesCustomTracking": true,
+  "dart.showTodos": true,
+  "dart.analysisExcludedFolders": [
+    "build",
+    ".dart_tool"
+  ],
+  "dart.enableSdkFormatter": true,
+  "dart.insertArgumentPlaceholders": false,
+  "dart.completeFunctionCalls": true,
+  "dart.showMainCodeLens": false,
+  "dart.showTestCodeLens": true,
+  "[dart]": {
+    "editor.formatOnSave": true,
+    "editor.formatOnType": true,
+    "editor.rulers": [120],
+    "editor.selectionHighlight": false,
+    "editor.suggest.snippetsPreventQuickSuggestions": false,
+    "editor.suggestSelection": "first",
+    "editor.tabCompletion": "onlySnippets",
+    "editor.wordBasedSuggestions": "off",
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": "explicit",
+      "source.fixAll": "explicit"
+    }
+  },
+  "files.associations": {
+    "*.dart": "dart"
+  },
+  "files.exclude": {
+    "**/.dart_tool": true,
+    // "**/build": true
+  },
+  "search.exclude": {
+    "**/.dart_tool": true,
+    "**/build": true,
+    "**/*.lock": true
+  },
+  
 }
