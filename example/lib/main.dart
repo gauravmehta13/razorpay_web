@@ -68,6 +68,7 @@ class _MyAppState extends State<MyApp> {
             await Clipboard.setData(ClipboardData(text: text));
             _showSnackBar("Copied to clipboard");
             await Future.delayed((const Duration(seconds: 1))).then((_) {
+              // ignore: use_build_context_synchronously
               openCheckout(context);
             });
           },
@@ -100,7 +101,7 @@ class _MyAppState extends State<MyApp> {
     _razorpay.clear();
   }
 
-  void openCheckout(BuildContext context) async {
+  void openCheckout(BuildContext context) {
     var options = {
       'key': 'rzp_test_1DP5mmOlF5G5ag',
       'amount': 100,

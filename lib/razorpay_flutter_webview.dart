@@ -239,13 +239,13 @@ class _RazorpayWebViewDialog extends StatefulWidget {
 class _RazorpayWebViewDialogState extends State<_RazorpayWebViewDialog> {
   void _handleCustomSchemeUrl(String url) {
     final uri = Uri.parse(url);
-    
+
     if (uri.host == 'success') {
       // Payment success
       final paymentId = uri.queryParameters['razorpay_payment_id'] ?? '';
       final orderId = uri.queryParameters['razorpay_order_id'];
       final signature = uri.queryParameters['razorpay_signature'];
-      
+
       widget.onResult({
         'type': ResponseCodes.CODE_PAYMENT_SUCCESS,
         'data': {
@@ -257,8 +257,9 @@ class _RazorpayWebViewDialogState extends State<_RazorpayWebViewDialog> {
     } else if (uri.host == 'error') {
       // Payment error
       final code = uri.queryParameters['code'] ?? ResponseCodes.UNKNOWN_ERROR;
-      final description = uri.queryParameters['description'] ?? 'Payment failed';
-      
+      final description =
+          uri.queryParameters['description'] ?? 'Payment failed';
+
       widget.onResult({
         'type': ResponseCodes.CODE_PAYMENT_ERROR,
         'data': {
@@ -276,7 +277,8 @@ class _RazorpayWebViewDialogState extends State<_RazorpayWebViewDialog> {
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
     final dialogWidth = screenSize.width > 500 ? 480.0 : screenSize.width - 32;
-    final dialogHeight = screenSize.height > 750 ? 720.0 : screenSize.height - 80;
+    final dialogHeight =
+        screenSize.height > 750 ? 720.0 : screenSize.height - 80;
 
     return Dialog(
       backgroundColor: Colors.transparent,
@@ -289,7 +291,7 @@ class _RazorpayWebViewDialogState extends State<_RazorpayWebViewDialog> {
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.2),
+              color: Colors.black.withValues(alpha: 0.2),
               blurRadius: 20,
               offset: const Offset(0, 10),
             ),
@@ -318,13 +320,13 @@ class _RazorpayWebViewDialogState extends State<_RazorpayWebViewDialog> {
             shouldOverrideUrlLoading: (controller, navigationAction) async {
               final url = navigationAction.request.url.toString();
               debugPrint('URL navigation: $url');
-              
+
               // Intercept custom scheme URLs for payment callbacks
               if (url.startsWith('razorpay://')) {
                 _handleCustomSchemeUrl(url);
                 return NavigationActionPolicy.CANCEL;
               }
-              
+
               return NavigationActionPolicy.ALLOW;
             },
             onLoadStart: (controller, url) {
@@ -349,8 +351,11 @@ class _RazorpayWebViewDialogState extends State<_RazorpayWebViewDialog> {
                   context: context,
                   barrierDismissible: false,
                   builder: (popupContext) {
-                    final popupWidth = screenSize.width > 500 ? 480.0 : screenSize.width - 32;
-                    final popupHeight = screenSize.height > 750 ? 720.0 : screenSize.height - 80;
+                    final popupWidth =
+                        screenSize.width > 500 ? 480.0 : screenSize.width - 32;
+                    final popupHeight = screenSize.height > 750
+                        ? 720.0
+                        : screenSize.height - 80;
 
                     return Dialog(
                       backgroundColor: Colors.transparent,
@@ -363,7 +368,7 @@ class _RazorpayWebViewDialogState extends State<_RazorpayWebViewDialog> {
                           borderRadius: BorderRadius.circular(16),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.2),
+                              color: Colors.black.withValues(alpha: 0.2),
                               blurRadius: 20,
                               offset: const Offset(0, 10),
                             ),

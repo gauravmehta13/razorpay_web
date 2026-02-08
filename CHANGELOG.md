@@ -1,3 +1,16 @@
+## 3.1.3
+- **Code Quality Improvements**:
+  - Fixed deprecated `withOpacity()` usage, replaced with `withValues(alpha:)` for Flutter 3.27+
+  - Fixed `use_build_context_synchronously` warning in example app
+  - Updated test suite to work with async platform detection
+- **Bug Fixes**:
+  - Improved test reliability for cross-platform scenarios
+  - Fixed code formatting issues
+- **Maintenance**:
+  - All tests passing
+  - Zero analysis issues
+  - Code formatted according to Dart standards
+
 ## 3.1.2
 - Stable release with all features from 3.1.1
 - Updated dependencies and documentation

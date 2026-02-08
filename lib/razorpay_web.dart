@@ -58,7 +58,9 @@ class Razorpay {
     }
 
     // Handle Windows, macOS, and Linux platforms via InAppWebView
-    if (UniversalPlatform.isWindows || UniversalPlatform.isMacOS || UniversalPlatform.isLinux) {
+    if (UniversalPlatform.isWindows ||
+        UniversalPlatform.isMacOS ||
+        UniversalPlatform.isLinux) {
       if (context == null) {
         _handleResult({
           'type': _CODE_PAYMENT_ERROR,
@@ -135,7 +137,10 @@ class Razorpay {
   /// Retrieves lost responses from platform
   void _resync() async {
     // Skip resync for Windows, macOS, Linux, and Web as they don't use method channels
-    if (UniversalPlatform.isWindows || UniversalPlatform.isMacOS || UniversalPlatform.isLinux || UniversalPlatform.isWeb) {
+    if (UniversalPlatform.isWindows ||
+        UniversalPlatform.isMacOS ||
+        UniversalPlatform.isLinux ||
+        UniversalPlatform.isWeb) {
       return;
     }
 
