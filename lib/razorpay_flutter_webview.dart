@@ -6,10 +6,10 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
 import 'razorpay_events.dart';
 
-/// Windows platform implementation for Razorpay using InAppWebView
-class RazorpayFlutterWindows {
+/// WebView platform implementation for Razorpay (Windows, macOS, Linux)
+class RazorpayFlutterWebView {
   static void registerWith() {
-    // Register the Windows plugin
+    // Register the WebView plugin
   }
 
   /// Opens Razorpay checkout in a WebView dialog
@@ -228,7 +228,7 @@ class _RazorpayWebViewDialogState extends State<_RazorpayWebViewDialog> {
                 ),
                 child: InAppWebView(
                   initialData: InAppWebViewInitialData(
-                    data: RazorpayFlutterWindows._generateCheckoutHtml(
+                    data: RazorpayFlutterWebView._generateCheckoutHtml(
                       widget.options,
                     ),
                     mimeType: 'text/html',

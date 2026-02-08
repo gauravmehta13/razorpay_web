@@ -41,9 +41,9 @@ flutter:
             pluginClass: RazorpayFlutterPlugin
             fileName: razorpay_flutter_web.dart
         windows:
-            dartPluginClass: RazorpayFlutterWindows
+            dartPluginClass: RazorpayFlutterWebView
         linux:
-            dartPluginClass: RazorpayFlutterWindows
+            dartPluginClass: RazorpayFlutterWebView
         macos:
-            dartPluginClass: RazorpayFlutterWindows
+            dartPluginClass: RazorpayFlutterWebView
 

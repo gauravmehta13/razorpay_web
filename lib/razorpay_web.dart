@@ -5,7 +5,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:universal_platform/universal_platform.dart';
 
 import 'razorpay_events.dart';
-import 'razorpay_flutter_windows.dart';
+import 'razorpay_flutter_webview.dart';
 export 'razorpay_events.dart';
 
 /// Flutter plugin for Razorpay SDK
@@ -70,8 +70,8 @@ class Razorpay {
         });
         return;
       }
-      final windowsPlugin = RazorpayFlutterWindows();
-      var response = await windowsPlugin.open(context, options);
+      final webViewPlugin = RazorpayFlutterWebView();
+      var response = await webViewPlugin.open(context, options);
       _handleResult(response);
       return;
     }

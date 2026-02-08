@@ -30,8 +30,8 @@ razorpay_web/
   - RazorpayEvents constants (EVENT_PAYMENT_SUCCESS, etc.)
   - ResponseCodes constants (error codes, status codes)
 
-- `razorpay_flutter_windows.dart` - Windows platform implementation
-  - RazorpayFlutterWindows class
+- `razorpay_flutter_webview.dart` - WebView platform implementation (Windows, macOS, Linux)
+  - RazorpayFlutterWebView class
   - InAppWebView-based checkout dialog
   - HTML generation for Razorpay checkout
   - JavaScript handler setup
@@ -138,7 +138,7 @@ flutter:
         pluginClass: RazorpayFlutterPlugin
         fileName: razorpay_flutter_web.dart
       windows:
-        dartPluginClass: RazorpayFlutterWindows
+        dartPluginClass: RazorpayFlutterWebView
 ```
 
 ## Naming Conventions
