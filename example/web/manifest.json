@@ -1,11 +1,11 @@
 {
-    "name": "example",
-    "short_name": "example",
+    "name": "Razorpay Flutter Example",
+    "short_name": "Razorpay",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "background_color": "#FFFFFF",
+    "theme_color": "#528FF0",
+    "description": "Example app demonstrating Razorpay Flutter plugin integration",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
