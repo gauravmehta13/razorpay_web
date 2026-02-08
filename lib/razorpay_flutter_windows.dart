@@ -250,9 +250,6 @@ class _RazorpayWebViewDialogState extends State<_RazorpayWebViewDialog> {
                   },
                   onLoadStop: (controller, url) {
                     debugPrint('WebView loaded: $url');
-                    setState(() {
-                      _isLoading = false;
-                    });
                   },
                   onReceivedError: (controller, request, error) {
                     debugPrint('WebView error: ${error.description}');
