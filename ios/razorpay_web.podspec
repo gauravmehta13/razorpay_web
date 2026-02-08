@@ -13,7 +13,10 @@ Pod::Spec.new do |s|
   s.source_files = 'Classes/**/*'
   s.public_header_files = 'Classes/**/*.h'
   s.dependency 'Flutter'
-  s.dependency 'razorpay-pod'
+  # Pinned to 1.3.2 - versions 1.4.0+ require displayController parameter in open() method
+  # which breaks compatibility with current implementation. Update requires view controller
+  # management changes in SwiftRazorpayFlutterPlugin.
+  s.dependency 'razorpay-pod', '1.3.2'
 
   s.ios.deployment_target = '10.0'
 end
