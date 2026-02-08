@@ -57,15 +57,15 @@ class Razorpay {
       return;
     }
 
-    // Handle Windows and macOS platforms via InAppWebView
-    if (UniversalPlatform.isWindows || UniversalPlatform.isMacOS) {
+    // Handle Windows, macOS, and Linux platforms via InAppWebView
+    if (UniversalPlatform.isWindows || UniversalPlatform.isMacOS || UniversalPlatform.isLinux) {
       if (context == null) {
         _handleResult({
           'type': _CODE_PAYMENT_ERROR,
           'data': {
             'code': INVALID_OPTIONS,
             'message':
-                'BuildContext is required for Windows and macOS platforms. Please pass context parameter to open() method.'
+                'BuildContext is required for Windows, macOS, and Linux platforms. Please pass context parameter to open() method.'
           }
         });
         return;
@@ -134,8 +134,8 @@ class Razorpay {
 
   /// Retrieves lost responses from platform
   void _resync() async {
-    // Skip resync for Windows, macOS, and Web as they don't use method channels
-    if (UniversalPlatform.isWindows || UniversalPlatform.isMacOS || UniversalPlatform.isWeb) {
+    // Skip resync for Windows, macOS, Linux, and Web as they don't use method channels
+    if (UniversalPlatform.isWindows || UniversalPlatform.isMacOS || UniversalPlatform.isLinux || UniversalPlatform.isWeb) {
       return;
     }
 
