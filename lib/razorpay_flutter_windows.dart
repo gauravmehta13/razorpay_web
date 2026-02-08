@@ -176,6 +176,8 @@ class _RazorpayWebViewDialog extends StatefulWidget {
 }
 
 class _RazorpayWebViewDialogState extends State<_RazorpayWebViewDialog> {
+  bool _isLoading = true;
+
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -250,9 +252,6 @@ class _RazorpayWebViewDialogState extends State<_RazorpayWebViewDialog> {
                   },
                   onLoadStop: (controller, url) {
                     debugPrint('WebView loaded: $url');
-                    setState(() {
-                      _isLoading = false;
-                    });
                   },
                   onReceivedError: (controller, request, error) {
                     debugPrint('WebView error: ${error.description}');
