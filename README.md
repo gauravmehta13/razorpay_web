@@ -28,6 +28,33 @@
 
 ---
 
+## ☕ Support the Development
+
+<div align="center">
+
+### 🏆 Help Keep This Project Alive & Thriving
+
+As a **full-time developer** working on this plugin in my limited spare time, your support means the world! Every contribution helps me dedicate more hours to:
+
+✨ Adding new features • 🐛 Fixing bugs faster • 📚 Improving documentation • 🚀 Supporting new platforms
+
+<br>
+
+<a href="https://buymeachai.ezee.li/gauravmehta13" target="_blank">
+  <img src="https://img.shields.io/badge/☕_Buy_Me_A_Chai-Support_Development-orange?style=for-the-badge&logo=buy-me-a-coffee&logoColor=white" alt="Buy Me A Chai" height="50">
+</a>
+
+<br>
+<br>
+
+**🌟 If this plugin saved you hours of work, consider buying me a chai!**
+
+*Your support directly impacts how much time I can invest in making this plugin better for everyone.*
+
+</div>
+
+---
+
 ## 📸 Screenshots
 
 <div align="center">
