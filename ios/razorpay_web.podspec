@@ -8,7 +8,7 @@ Pod::Spec.new do |s|
   s.description      = 'Flutter plugin for Razorpay SDK.'
   s.homepage         = 'https://github.com/razorpay/razorpay-flutter'
   s.license          = { :file => '../LICENSE' }
-  s.author           = { 'Chintan Acharya' => 'chintan.acharya@razorpay.com' }
+  s.author           = { 'Gaurav Yadav' => '269mehta@gmail.com' }
   s.source           = { :path => '.' }
   s.source_files = 'Classes/**/*'
   s.public_header_files = 'Classes/**/*.h'
