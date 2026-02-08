@@ -832,6 +832,22 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
+## ⚠️ Disclaimer
+
+**This is NOT an official Razorpay plugin.**
+
+This plugin is an independent, community-driven project and is not affiliated with, endorsed by, or officially supported by Razorpay. 
+
+**Use at your own risk.** The author and contributors:
+- Are not responsible for any issues, damages, or losses arising from the use of this plugin
+- Make no warranties or guarantees regarding functionality, security, or reliability
+- Are not liable for any financial transactions or payment processing issues
+- Recommend thorough testing in sandbox/test mode before production use
+
+For official Razorpay integrations and support, please refer to [Razorpay's official documentation](https://razorpay.com/docs/).
+
+---
+
 <div align="center">
 
 **Made with ❤️ for the Flutter community**
