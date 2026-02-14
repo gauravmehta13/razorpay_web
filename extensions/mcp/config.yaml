@@ -1,0 +1,54 @@
+# MCP configuration for razorpay_web package
+# See: https://flutter.dev/go/packaged-ai-assets
+
+resources:
+  - name: integration_guide
+    title: "Razorpay Flutter Integration Guide"
+    description: "Step-by-step guide to integrate Razorpay payments in a Flutter app across all platforms (Android, iOS, Web, Windows, Linux, macOS)."
+    path: resources/integration_guide.md
+
+  - name: api_reference
+    title: "Razorpay Flutter API Reference"
+    description: "Complete API reference for the Razorpay class, response models, event constants, and error codes."
+    path: resources/api_reference.md
+
+  - name: platform_setup
+    title: "Platform-Specific Setup Guide"
+    description: "Per-platform configuration requirements for Android, iOS, Web, Windows, Linux, and macOS."
+    path: resources/platform_setup.md
+
+  - name: troubleshooting
+    title: "Razorpay Flutter Troubleshooting"
+    description: "Common issues and solutions for Razorpay Flutter integration, plus test credentials for sandbox testing."
+    path: resources/troubleshooting.md
+
+prompts:
+  - name: integrate_razorpay
+    title: "Integrate Razorpay Payments"
+    description: "Scaffold a complete Razorpay payment integration into a Flutter app with event handling and cleanup."
+    path: prompts/integrate_razorpay.md
+    arguments:
+      - name: key
+        description: "Razorpay API key (defaults to test key if omitted)"
+        required: false
+      - name: amount
+        description: "Payment amount in smallest currency unit, e.g. 50000 for ₹500"
+        required: false
+
+  - name: debug_payment
+    title: "Debug Razorpay Payment Issues"
+    description: "Diagnose and fix common Razorpay payment integration problems."
+    path: prompts/debug_payment.md
+    arguments:
+      - name: error_message
+        description: "The error message or symptom to diagnose"
+        required: true
+
+  - name: add_platform_support
+    title: "Add Platform Support"
+    description: "Add platform-specific configuration for Razorpay on a given platform."
+    path: prompts/add_platform_support.md
+    arguments:
+      - name: platform
+        description: "Target platform: android, ios, web, windows, linux, or macos"
+        required: true

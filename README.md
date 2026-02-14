@@ -89,7 +89,7 @@ Add `razorpay_web` to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  razorpay_web: ^3.1.0
+  razorpay_web: ^3.1.1
 ```
 
 Then run:
@@ -411,14 +411,43 @@ void dispose() {
 
 ## 🧪 Testing
 
-Razorpay provides test UPI IDs for sandbox testing:
+Razorpay provides test credentials for sandbox testing:
+
+
+
+### Test UPI IDs
 
 | UPI ID | Result |
 |--------|--------|
 | `success@razorpay` | ✅ Payment Success |
 | `failure@razorpay` | ❌ Payment Failure |
 
-Use these with any test Razorpay key to simulate payment flows without real transactions.
+### Test Cards
+
+| Card Number | CVV | Expiry | Result |
+|-------------|-----|--------|--------|
+| 4111 1111 1111 1111 | Any | Future | ✅ Success |
+| 4012 8888 8888 1881 | Any | Future | ✅ Success |
+| 5555 5555 5555 4444 | Any | Future | ✅ Success |
+
+> 💡 **Tip**: Use any future expiry date and any CVV for test cards.
+
+### Running Tests
+
+The plugin includes comprehensive unit tests:
+
+```bash
+# Run all tests
+flutter test
+
+# Run specific test file
+flutter test test/razorpay_flutter_test.dart
+
+# Run with coverage
+flutter test --coverage
+```
+
+> 📚 Learn more about [Razorpay Test Mode](https://razorpay.com/docs/payments/payments/test-card-details/)
 
 ---
 
@@ -507,12 +536,19 @@ Emitted when payment succeeds.
 | `orderId` | `String?` | Order ID (if order-based payment) |
 | `signature` | `String?` | Payment signature for verification (orders only) |
 
+**Methods:**
+- `toJson()`: Convert response to JSON map
+- `toString()`: Get string representation
+
 **Example:**
 ```dart
 void _handlePaymentSuccess(PaymentSuccessResponse response) {
   print('Payment ID: ${response.paymentId}');
   print('Order ID: ${response.orderId}');
   print('Signature: ${response.signature}');
+  
+  // Convert to JSON for backend verification
+  Map<String, dynamic> json = response.toJson();
 }
 ```
 
@@ -524,12 +560,22 @@ Emitted when payment fails.
 |----------|------|-------------|
 | `code` | `int?` | Error code (see error codes below) |
 | `message` | `String?` | Human-readable error message |
+| `orderId` | `String?` | Order ID (if order-based payment) |
+| `paymentId` | `String?` | Payment ID (if payment was initiated) |
+
+**Methods:**
+- `toJson()`: Convert response to JSON map
+- `toString()`: Get string representation
 
 **Example:**
 ```dart
 void _handlePaymentError(PaymentFailureResponse response) {
   print('Error Code: ${response.code}');
   print('Error Message: ${response.message}');
+  print('Order ID: ${response.orderId}');
+  
+  // Log error details
+  print(response.toString());
 }
 ```
 
@@ -541,10 +587,19 @@ Emitted when user selects an external wallet.
 |----------|------|-------------|
 | `walletName` | `String?` | Name of the selected wallet (e.g., "paytm") |
 
+**Methods:**
+- `toJson()`: Convert response to JSON map
+- `toString()`: Get string representation
+
 **Example:**
 ```dart
 void _handleExternalWallet(ExternalWalletResponse response) {
   print('Wallet: ${response.walletName}');
+  
+  // Handle wallet-specific logic
+  if (response.walletName == 'paytm') {
+    // Paytm-specific handling
+  }
 }
 ```
 
@@ -723,18 +778,20 @@ defaultConfig {
 </details>
 
 <details>
-<summary><b>Windows: Context parameter required</b></summary>
+<summary><b>Windows/Linux/macOS: Context parameter required</b></summary>
 
 **Error:**
 ```
-BuildContext is required for Windows platform
+BuildContext is required for Windows/Linux/macOS platform
 ```
 
 **Solution:**
-Always pass `context` when calling `open()` on Windows:
+Always pass `context` when calling `open()` on desktop platforms:
 ```dart
 _razorpay.open(options, context: context);
 ```
+
+The plugin uses InAppWebView for desktop platforms, which requires a BuildContext to display the payment dialog.
 
 </details>
 
@@ -788,15 +845,85 @@ void _handleExternalWallet(ExternalWalletResponse response) { }
 </details>
 
 <details>
-<summary><b>Class name conflict</b></summary>
+<summary><b>Web: Razorpay is not defined</b></summary>
 
 **Error:**
 ```
-xxxx is not defined for the class 'Razorpay'
+ReferenceError: Razorpay is not defined
 ```
 
 **Solution:**
-Check if you're accidentally redeclaring the `Razorpay` class. The plugin exports it from `package:razorpay_web/razorpay_web.dart`.
+Ensure you've added the Razorpay script to `web/index.html`:
+```html
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+```
+
+The script must be loaded before your Flutter app initializes.
+
+</details>
+
+<details>
+<summary><b>Payment not opening on desktop platforms</b></summary>
+
+**Issue:**
+Payment dialog doesn't appear on Windows/Linux/macOS.
+
+**Solution:**
+1. Ensure you're passing `context` parameter:
+   ```dart
+   _razorpay.open(options, context: context);
+   ```
+
+2. Check that `flutter_inappwebview` is properly installed:
+   ```bash
+   flutter pub get
+   flutter clean
+   flutter run
+   ```
+
+3. For Windows, verify Edge WebView2 Runtime is installed (pre-installed on Windows 10/11).
+
+</details>
+
+<details>
+<summary><b>Memory leaks or duplicate listeners</b></summary>
+
+**Issue:**
+Event handlers being called multiple times or memory warnings.
+
+**Solution:**
+Always call `clear()` in your widget's `dispose()` method:
+```dart
+@override
+void dispose() {
+  _razorpay.clear(); // Removes all event listeners
+  super.dispose();
+}
+```
+
+</details>
+
+<details>
+<summary><b>Invalid options error</b></summary>
+
+**Error:**
+```
+Error Code: 1 - Invalid options
+```
+
+**Solution:**
+Ensure required fields are present:
+```dart
+var options = {
+  'key': 'YOUR_KEY',      // Required
+  'amount': 100,          // Required (must be integer)
+  'name': 'Business Name' // Recommended
+};
+```
+
+Amount must be in smallest currency unit (paise for INR):
+- ₹1 = 100 paise
+- ₹500 = 50000 paise
 
 </details>
 
@@ -814,7 +941,49 @@ Check if you're accidentally redeclaring the `Razorpay` class. The plugin export
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+Contributions are welcome! Here's how you can help:
+
+### Reporting Issues
+- Check existing issues before creating a new one
+- Provide detailed reproduction steps
+- Include platform information (OS, Flutter version, plugin version)
+- Share relevant code snippets and error messages
+
+### Pull Requests
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Make your changes
+4. Add tests for new functionality
+5. Ensure all tests pass (`flutter test`)
+6. Run code analysis (`flutter analyze`)
+7. Format your code (`dart format .`)
+8. Commit your changes (`git commit -m 'Add amazing feature'`)
+9. Push to the branch (`git push origin feature/amazing-feature`)
+10. Open a Pull Request
+
+### Development Setup
+```bash
+# Clone the repository
+git clone https://github.com/gauravmehta13/razorpay_web.git
+cd razorpay_web
+
+# Get dependencies
+flutter pub get
+
+# Run tests
+flutter test
+
+# Run example app
+cd example
+flutter run
+```
+
+### Code Style
+- Follow [Effective Dart](https://dart.dev/guides/language/effective-dart) guidelines
+- Use meaningful variable and function names
+- Add comments for complex logic
+- Keep functions small and focused
+- Write tests for new features
 
 ---
 
@@ -828,7 +997,21 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - Built on top of official [Razorpay Android](https://razorpay.com/docs/checkout/android/) and [iOS](https://razorpay.com/docs/ios/) SDKs
 - Uses [flutter_inappwebview](https://pub.dev/packages/flutter_inappwebview) for Windows/Linux/macOS support
+- Uses [eventify](https://pub.dev/packages/eventify) for event-driven architecture
 - Inspired by the Flutter community's need for a truly cross-platform payment solution
+
+### Contributors
+
+Thanks to all contributors who have helped improve this plugin! 🎉
+
+### Special Thanks
+
+To everyone who has:
+- Reported bugs and issues
+- Suggested new features
+- Submitted pull requests
+- Supported the project financially
+- Shared the plugin with others
 
 ---
 
